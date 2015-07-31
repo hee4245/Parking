@@ -1,17 +1,35 @@
 package com.bug.parking;
 
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewTreeObserver;
+import android.widget.RelativeLayout;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        RelativeLayout cameraLayout = (RelativeLayout) findViewById(R.id.cameraLayout);
+        cameraLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                RelativeLayout cameraLayout = (RelativeLayout) findViewById(R.id.cameraLayout);
+                int width = cameraLayout.getWidth();
+                int height = width * 3 / 5;
+                RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(width, height);
+                cameraLayout.setLayoutParams(layoutParams);
+            }
+        });
     }
 
     @Override

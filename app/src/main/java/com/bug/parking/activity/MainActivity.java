@@ -1,4 +1,4 @@
-package com.bug.parking;
+package com.bug.parking.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -6,6 +6,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewTreeObserver;
 import android.widget.RelativeLayout;
+
+import com.bug.parking.R;
 
 
 public class MainActivity extends AppCompatActivity {

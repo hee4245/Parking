@@ -1,21 +1,31 @@
 package com.bug.parking.activity;
 
+import android.hardware.Camera;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewTreeObserver;
+import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 import com.bug.parking.R;
-
+import com.bug.parking.camera.CameraPreview;
+import com.bug.parking.camera.MyCamera;
 
 public class MainActivity extends AppCompatActivity {
+    private Camera camera;
+    private CameraPreview cameraPreview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        camera = MyCamera.getCameraInstance();
+        cameraPreview = new CameraPreview(this, camera);
+        FrameLayout cameraPreviewLayout = (FrameLayout) findViewById(R.id.cameraPreview);
+        cameraPreviewLayout.addView(cameraPreview);
     }
 
     @Override

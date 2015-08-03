@@ -16,7 +16,7 @@ import com.bug.parking.camera.MyCamera;
 import butterknife.*;
 
 public class MainActivity extends AppCompatActivity {
-    private Camera camera;
+    private MyCamera myCamera;
     private CameraPreview cameraPreview;
 
     @Bind(R.id.cameraLayout)
@@ -30,8 +30,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        camera = MyCamera.getCameraInstance();
-        cameraPreview = new CameraPreview(this, camera);
+        myCamera = new MyCamera(this);
+        cameraPreview = new CameraPreview(this,  myCamera.getCamera());
         cameraPreviewLayout.addView(cameraPreview);
     }
 
@@ -47,6 +47,10 @@ public class MainActivity extends AppCompatActivity {
                 cameraLayout.setLayoutParams(layoutParams);
             }
         });
+    }
+
+    @OnClick(R.id.cameraButton) void onCameraButtonClick() {
+        myCamera.takePicture();
     }
 
     @Override

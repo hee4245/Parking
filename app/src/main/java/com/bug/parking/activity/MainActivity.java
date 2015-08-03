@@ -13,29 +13,34 @@ import com.bug.parking.R;
 import com.bug.parking.camera.CameraPreview;
 import com.bug.parking.camera.MyCamera;
 
+import butterknife.*;
+
 public class MainActivity extends AppCompatActivity {
     private Camera camera;
     private CameraPreview cameraPreview;
+
+    @Bind(R.id.cameraLayout)
+    protected  RelativeLayout cameraLayout;
+    @Bind(R.id.cameraPreview)
+    protected  FrameLayout cameraPreviewLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
 
         camera = MyCamera.getCameraInstance();
         cameraPreview = new CameraPreview(this, camera);
-        FrameLayout cameraPreviewLayout = (FrameLayout) findViewById(R.id.cameraPreview);
         cameraPreviewLayout.addView(cameraPreview);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        RelativeLayout cameraLayout = (RelativeLayout) findViewById(R.id.cameraLayout);
         cameraLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                RelativeLayout cameraLayout = (RelativeLayout) findViewById(R.id.cameraLayout);
                 int width = cameraLayout.getWidth();
                 int height = width * 3 / 5;
                 RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(width, height);

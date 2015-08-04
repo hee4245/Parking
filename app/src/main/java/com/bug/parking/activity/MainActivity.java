@@ -1,12 +1,14 @@
 package com.bug.parking.activity;
 
-import android.hardware.Camera;
+import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.bug.parking.R;
@@ -18,11 +20,27 @@ import butterknife.*;
 public class MainActivity extends AppCompatActivity {
     private MyCamera myCamera;
     private CameraPreview cameraPreview;
+    private boolean pictureTaken = false;
 
     @Bind(R.id.cameraLayout)
-    protected  RelativeLayout cameraLayout;
+    protected  FrameLayout cameraLayout;
     @Bind(R.id.cameraPreview)
     protected  FrameLayout cameraPreviewLayout;
+    @Bind(R.id.pictureView)
+    protected ImageView pictureView;
+
+    public interface Callback {
+        public void callback();
+    }
+    public Callback afterTakePicture = new Callback() {
+        @Override
+        public void callback() {
+            Drawable picture = myCamera.getPicture();
+            pictureView.setImageDrawable(picture);
+            pictureView.setVisibility(View.VISIBLE);
+            pictureTaken = true;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        myCamera = new MyCamera(this);
+        myCamera = new MyCamera(this, afterTakePicture);
         cameraPreview = new CameraPreview(this,  myCamera.getCamera());
         cameraPreviewLayout.addView(cameraPreview);
     }
@@ -38,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
         cameraLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -47,10 +66,31 @@ public class MainActivity extends AppCompatActivity {
                 cameraLayout.setLayoutParams(layoutParams);
             }
         });
+
+        if (!pictureTaken) {
+            cameraPreview.startPreview();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        cameraPreview.stopPreview();
     }
 
     @OnClick(R.id.cameraButton) void onCameraButtonClick() {
-        myCamera.takePicture();
+        if (!pictureTaken) {
+            myCamera.takePicture();
+        } else {
+            resetPictureView();
+        }
+    }
+
+    private void resetPictureView() {
+        cameraPreview.startPreview();
+        pictureView.setVisibility(View.INVISIBLE);
+        pictureTaken = false;
     }
 
     @Override

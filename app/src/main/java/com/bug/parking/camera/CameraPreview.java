@@ -14,18 +14,17 @@ import java.io.IOException;
 public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
     private static final String TAG = "CameraPreview";
 
-    private SurfaceHolder surfaceHolder;
     private Camera camera;
 
     public CameraPreview(Context context, Camera camera) {
         super(context);
 
         this.camera = camera;
-        surfaceHolder = getHolder();
+        SurfaceHolder surfaceHolder = getHolder();
         surfaceHolder.addCallback(this);
     }
 
-    public void surfaceCreated(SurfaceHolder holder) {
+    private void initPreview(SurfaceHolder holder) {
         try {
             camera.setPreviewDisplay(holder);
         } catch (IOException e) {
@@ -33,15 +32,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         }
     }
 
-    public void surfaceDestroyed(SurfaceHolder holder) {
-        camera.stopPreview();
-    }
-
-    public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
-        if (holder.getSurface() == null) {
-            return;
-        }
-
+    public void startPreview() {
         try {
             camera.stopPreview();
         } catch (Exception e) {
@@ -53,5 +44,25 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         } catch (Exception e) {
             Log.d(TAG, "Error starting camera preview: " + e.getMessage());
         }
+    }
+
+    public void stopPreview() {
+        camera.stopPreview();
+    }
+
+    public void surfaceCreated(SurfaceHolder holder) {
+       initPreview(holder);
+    }
+
+    public void surfaceDestroyed(SurfaceHolder holder) {
+        stopPreview();
+    }
+
+    public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
+        if (holder.getSurface() == null) {
+            return;
+        }
+
+        startPreview();
     }
 }

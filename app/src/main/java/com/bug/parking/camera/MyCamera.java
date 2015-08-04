@@ -3,12 +3,13 @@ package com.bug.parking.camera;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.BitmapRegionDecoder;
 import android.graphics.Matrix;
+import android.graphics.drawable.Drawable;
 import android.hardware.Camera;
-import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.bug.parking.activity.MainActivity;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -20,16 +21,17 @@ import java.io.IOException;
  */
 public class MyCamera {
     private static final String TAG = "MyCamera";
-    private static final int MEDIA_TYPE_IMAGE = 1;
     private static final String fileName = "park.png";
 
     private Context context;
     private Camera camera;
     private Camera.PictureCallback pictureCallback;
+    private MainActivity.Callback afterTakePicture;
 
-    public MyCamera(Context context) {
+    public MyCamera(Context context, MainActivity.Callback afterTakePicture) {
         try {
             this.context = context;
+            this.afterTakePicture = afterTakePicture;
 
             initCamera();
             initPicktureCallback();
@@ -40,6 +42,7 @@ public class MyCamera {
 
     @Override
     protected void finalize() throws Throwable {
+        super.finalize();
         camera.release();
     }
 
@@ -71,7 +74,7 @@ public class MyCamera {
 //                    fos.flush();
                     fos.close();
 
-                    Toast.makeText(context, "Take Picture!", Toast.LENGTH_LONG);
+                    afterTakePicture.callback();
                 } catch (FileNotFoundException e) {
                     Log.d(TAG, "File not found: " + e.getMessage());
                 } catch (IOException e) {
@@ -81,8 +84,16 @@ public class MyCamera {
         };
     }
 
+    private String getPicturePath() {
+        return "" + context.getExternalFilesDir(null).toString() + "/" + fileName;
+    }
+
     public Camera getCamera() {
         return camera;
+    }
+
+    public Drawable getPicture() {
+        return Drawable.createFromPath(getPicturePath());
     }
 
     public void takePicture() {

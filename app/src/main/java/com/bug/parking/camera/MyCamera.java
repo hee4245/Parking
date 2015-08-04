@@ -3,6 +3,8 @@ package com.bug.parking.camera;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.BitmapRegionDecoder;
+import android.graphics.Matrix;
 import android.hardware.Camera;
 import android.os.Environment;
 import android.util.Log;
@@ -58,12 +60,15 @@ public class MyCamera {
                 try {
                     fos = new FileOutputStream(file);
 
-//                    Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-//                    Bitmap cropedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight());
-//                    cropedBitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                    Matrix matrix = new Matrix();
+                    matrix.setRotate(90.0f);
 
-                    fos.write(data);
-                    fos.flush();
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+                    Bitmap cropedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getHeight() * 3 / 5, bitmap.getHeight(), matrix, true);
+                    cropedBitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+
+//                    fos.write(data);
+//                    fos.flush();
                     fos.close();
 
                     Toast.makeText(context, "Take Picture!", Toast.LENGTH_LONG);

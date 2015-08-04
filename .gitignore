@@ -5,3 +5,9 @@
 .DS_Store
 /build
 /captures
+.idea/encodings.xml
+.idea/runConfigurations.xml
+.idea/gradle.xml
+.idea/misc.xml
+Parking.iml
+app/app.iml

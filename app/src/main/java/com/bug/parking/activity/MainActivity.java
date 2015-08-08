@@ -3,15 +3,19 @@ package com.bug.parking.activity;
 import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.bug.parking.R;
+import com.bug.parking.adapter.FloorAdapter;
 import com.bug.parking.camera.CameraPreview;
 import com.bug.parking.camera.MyCamera;
 
@@ -28,6 +32,11 @@ public class MainActivity extends AppCompatActivity {
     protected  FrameLayout cameraPreviewLayout;
     @Bind(R.id.pictureView)
     protected ImageView pictureView;
+    @Bind(R.id.floorController)
+    protected RecyclerView floorController;
+
+    private LinearLayoutManager floorLayoutManger;
+    private RecyclerView.Adapter floorAdapter;
 
     public interface Callback {
         public void callback();
@@ -51,6 +60,19 @@ public class MainActivity extends AppCompatActivity {
         myCamera = new MyCamera(this, afterTakePicture);
         cameraPreview = new CameraPreview(this,  myCamera.getCamera());
         cameraPreviewLayout.addView(cameraPreview);
+
+        initRecyclerView();
+    }
+
+    private void initRecyclerView() {
+
+        floorLayoutManger = new LinearLayoutManager(this, LinearLayout.HORIZONTAL, false);
+        floorController.setLayoutManager(floorLayoutManger);
+
+        floorAdapter = new FloorAdapter();
+        floorController.setAdapter(floorAdapter);
+
+        floorController.setScrollingTouchSlop(RecyclerView.TOUCH_SLOP_PAGING);
     }
 
     @Override

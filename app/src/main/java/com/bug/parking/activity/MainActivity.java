@@ -20,6 +20,7 @@ import butterknife.*;
 public class MainActivity extends AppCompatActivity {
     private MyCamera myCamera;
     private CameraPreview cameraPreview;
+    private boolean pictureTaking = false;
     private boolean pictureTaken = false;
 
     @Bind(R.id.cameraLayout)
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
             Drawable picture = myCamera.getPicture();
             pictureView.setImageDrawable(picture);
             pictureView.setVisibility(View.VISIBLE);
+            pictureTaking = false;
             pictureTaken = true;
         }
     };
@@ -81,7 +83,10 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.cameraButton) void onCameraButtonClick() {
         if (!pictureTaken) {
-            myCamera.takePicture();
+            if (!pictureTaking) {
+                pictureTaking = true;
+                myCamera.takePicture();
+            }
         } else {
             resetPictureView();
         }
@@ -90,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
     private void resetPictureView() {
         cameraPreview.startPreview();
         pictureView.setVisibility(View.INVISIBLE);
+        pictureTaking = false;
         pictureTaken = false;
     }
 

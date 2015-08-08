@@ -51,6 +51,7 @@ public class MyCamera {
         camera.setDisplayOrientation(90);
         Camera.Parameters params = camera.getParameters();
         params.setRotation(90);
+        params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
         camera.setParameters(params);
     }
 

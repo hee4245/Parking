@@ -12,9 +12,11 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.bug.parking.R;
+import com.bug.parking.adapter.FloorAdapter;
 import com.bug.parking.camera.CameraPreview;
 import com.bug.parking.camera.MyCamera;
 
+import antistatic.spinnerwheel.AbstractWheel;
 import butterknife.*;
 
 public class MainActivity extends AppCompatActivity {
@@ -29,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
     protected  FrameLayout cameraPreviewLayout;
     @Bind(R.id.pictureView)
     protected ImageView pictureView;
+    @Bind(R.id.floorController)
+    protected AbstractWheel floorController;
 
     public interface Callback {
         public void callback();
@@ -51,15 +55,15 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        
-        myCamera = new MyCamera(this, afterTakePicture);
-        cameraPreview = new CameraPreview(this,  myCamera.getCamera());
-        cameraPreviewLayout.addView(cameraPreview);
+
+        initCamera();
+        initFloorController();
     }
 
     @Override
@@ -91,6 +95,17 @@ public class MainActivity extends AppCompatActivity {
 //    protected void onPause() {
 //        super.onPause();
 //    }
+
+    private void initCamera() {
+        myCamera = new MyCamera(this, afterTakePicture);
+        cameraPreview = new CameraPreview(this,  myCamera.getCamera());
+        cameraPreviewLayout.addView(cameraPreview);
+    }
+
+    private void initFloorController() {
+        floorController.setVisibleItems(7);
+        floorController.setViewAdapter(new FloorAdapter(this));
+    }
 
     @OnClick(R.id.cameraButton) void onCameraButtonClick() {
         if (!pictureTaken) {

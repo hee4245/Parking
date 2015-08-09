@@ -40,13 +40,6 @@ public class MyCamera {
         }
     }
 
-    @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
-        camera.release();
-        camera = null;
-    }
-
     private void initCamera() {
         camera = Camera.open();
         camera.setDisplayOrientation(90);
@@ -54,6 +47,10 @@ public class MyCamera {
         params.setRotation(90);
         params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
         camera.setParameters(params);
+    }
+
+    public void destoryCamera() {
+        camera.release();
     }
 
     private void initPicktureCallback() {

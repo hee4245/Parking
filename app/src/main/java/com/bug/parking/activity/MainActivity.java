@@ -51,7 +51,12 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        
         myCamera = new MyCamera(this, afterTakePicture);
         cameraPreview = new CameraPreview(this,  myCamera.getCamera());
         cameraPreviewLayout.addView(cameraPreview);
@@ -61,6 +66,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
 
+        cameraPreviewLayout.removeView(cameraPreview);
+        cameraPreview = null;
+        myCamera.destoryCamera();
         myCamera = null;
     }
 

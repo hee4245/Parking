@@ -1,33 +1,41 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" tools:context=".MainActivity">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
     <FrameLayout
         android:id="@+id/cameraPreview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"/>
+        android:layout_alignParentTop="true" />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <FrameLayout
             android:id="@+id/cameraLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true">
+
             <ImageView
                 android:id="@+id/pictureView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
-                android:visibility="invisible"/>
+                android:visibility="invisible" />
+
             <Button
                 android:id="@+id/cameraButton"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#00000000"/>
+                android:background="#00000000" />
         </FrameLayout>
 
-        /* 배너 */
+        /* banner */
         <View
             android:id="@+id/banner"
             android:layout_alignParentBottom="true"
@@ -36,13 +44,52 @@
             android:background="#0000FF"
             />
 
-        /* 층수 */
-        <View
+        /* floor */
+        <RelativeLayout
             android:id="@+id/floor"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
             android:layout_below="@id/cameraLayout"
-            android:background="#FF0000"/>
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:background="#EEEEEE">
+
+            <TextView
+                android:id="@+id/leftAngle"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:gravity="center"
+                android:textSize="23dp"
+                android:text="&lt;" />
+
+            <TextView
+                android:id="@+id/rightAngle"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:gravity="center"
+                android:textSize="23dp"
+                android:text="&gt;" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_toRightOf="@id/leftAngle"
+                android:layout_toLeftOf="@id/rightAngle">
+
+                <antistatic.spinnerwheel.WheelHorizontalView
+                    android:id="@+id/floorController"
+                    app:isAllVisible="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true" />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
 
         /* 시간설정, 메모, parking */
         <RelativeLayout

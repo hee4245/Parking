@@ -49,8 +49,8 @@
             android:id="@+id/floor"
             android:layout_below="@id/cameraLayout"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:background="#EEEEEE">
+            android:layout_height="60dp"
+            android:background="#F1F1F1">
 
             <TextView
                 android:id="@+id/leftAngle"
@@ -124,6 +124,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
                         android:gravity="center"
                         android:text="10"
                         android:background="@drawable/memo"/>

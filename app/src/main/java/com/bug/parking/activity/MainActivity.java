@@ -103,8 +103,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initFloorController() {
-        floorController.setVisibleItems(7);
+//        floorController.setVisibleItems(7);
         floorController.setViewAdapter(new FloorAdapter(this));
+        floorController.setCurrentItem(5);
     }
 
     @OnClick(R.id.cameraButton) void onCameraButtonClick() {

@@ -46,7 +46,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#00FF00"
-                android:text="OK" />
+                android:text="@string/parking" />
 
             <View
                 android:layout_width="match_parent"
@@ -59,15 +59,52 @@
             android:layout_height="match_parent"
             android:layout_above="@id/footer"
             android:layout_below="@id/cameraLayout"
-            android:background="#00FFFF"
+            android:background="#EEEEEE"
             android:orientation="vertical">
 
-            <antistatic.spinnerwheel.WheelHorizontalView
-                android:id="@+id/floorController"
-                app:isAllVisible="true"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_weight="1" />
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/leftAngle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:gravity="center"
+                    android:textSize="23dp"
+                    android:text="&lt;" />
+
+                <TextView
+                    android:id="@+id/rightAngle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:gravity="center"
+                    android:textSize="23dp"
+                    android:text="&gt;" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_toRightOf="@id/leftAngle"
+                    android:layout_toLeftOf="@id/rightAngle">
+
+                    <antistatic.spinnerwheel.WheelHorizontalView
+                        android:id="@+id/floorController"
+                        app:isAllVisible="true"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true" />
+
+                </RelativeLayout>
+
+            </RelativeLayout>
 
             <View
                 android:layout_width="match_parent"

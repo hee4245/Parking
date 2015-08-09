@@ -67,7 +67,7 @@ public class MyCamera {
 
                     Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
                     Bitmap cropedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getHeight() * 3 / 5, bitmap.getHeight(), matrix, true);
-                    cropedBitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                    cropedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
 
 //                    fos.write(data);
 //                    fos.flush();

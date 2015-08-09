@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
             Drawable picture = myCamera.getPicture();
             pictureView.setImageDrawable(picture);
             pictureView.setVisibility(View.VISIBLE);
+            cameraPreview.stopPreview();
             pictureTaking = false;
             pictureTaken = true;
         }
@@ -47,12 +48,20 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
         myCamera = new MyCamera(this, afterTakePicture);
         cameraPreview = new CameraPreview(this,  myCamera.getCamera());
         cameraPreviewLayout.addView(cameraPreview);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        myCamera = null;
     }
 
     @Override
@@ -68,18 +77,12 @@ public class MainActivity extends AppCompatActivity {
                 cameraLayout.setLayoutParams(layoutParams);
             }
         });
-
-        if (!pictureTaken) {
-            cameraPreview.startPreview();
-        }
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        cameraPreview.stopPreview();
-    }
+//    @Override
+//    protected void onPause() {
+//        super.onPause();
+//    }
 
     @OnClick(R.id.cameraButton) void onCameraButtonClick() {
         if (!pictureTaken) {

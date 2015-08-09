@@ -44,6 +44,7 @@ public class MyCamera {
     protected void finalize() throws Throwable {
         super.finalize();
         camera.release();
+        camera = null;
     }
 
     private void initCamera() {

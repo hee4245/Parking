@@ -1,5 +1,6 @@
 package com.bug.parking.activity;
 
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -7,6 +8,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -24,6 +27,9 @@ public class MainActivity extends AppCompatActivity {
     private CameraPreview cameraPreview;
     private boolean pictureTaking = false;
     private boolean pictureTaken = false;
+    private boolean parked = false;
+
+    String[] floors = new String[]{"B5", "B4", "B3", "B2", "B1", "1F", "2F", "3F", "4F", "5F"};
 
     @Bind(R.id.cameraLayout)
     protected  FrameLayout cameraLayout;
@@ -33,6 +39,10 @@ public class MainActivity extends AppCompatActivity {
     protected ImageView pictureView;
     @Bind(R.id.floorController)
     protected AbstractWheel floorController;
+    @Bind(R.id.memo)
+    protected EditText memoController;
+    @Bind(R.id.parking)
+    protected Button parkingButton;
 
     public interface Callback {
         public void callback();
@@ -80,6 +90,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
+        loadData();
+
         cameraLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -96,6 +108,8 @@ public class MainActivity extends AppCompatActivity {
 //        super.onPause();
 //    }
 
+    // init
+
     private void initCamera() {
         myCamera = new MyCamera(this, afterTakePicture);
         cameraPreview = new CameraPreview(this,  myCamera.getCamera());
@@ -104,11 +118,29 @@ public class MainActivity extends AppCompatActivity {
 
     private void initFloorController() {
 //        floorController.setVisibleItems(7);
-        floorController.setViewAdapter(new FloorAdapter(this));
+        floorController.setViewAdapter(new FloorAdapter(this, floors));
         floorController.setCurrentItem(5);
     }
 
-    @OnClick(R.id.cameraButton) void onCameraButtonClick() {
+    private boolean isParked() {
+        return parked;
+    }
+
+    private void setParked(boolean parked) {
+        // change parking button
+        if (parked) {
+            parkingButton.setText("Find");
+        } else {
+            parkingButton.setText("Parking");
+        }
+
+        this.parked = parked;
+    }
+
+    // picture
+
+    @OnClick(R.id.cameraButton)
+    void onCameraButtonClick() {
         if (!pictureTaken) {
             if (!pictureTaking) {
                 pictureTaking = true;
@@ -125,6 +157,85 @@ public class MainActivity extends AppCompatActivity {
         pictureTaking = false;
         pictureTaken = false;
     }
+
+    // save & load
+
+    @OnClick(R.id.parking)
+    void onParkingButtonClick() {
+        if (!isParked()) {
+            saveData();
+        } else {
+            clearData();
+        }
+    }
+
+    void saveData() {
+        SharedPreferences sharedPref = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+
+        // picture is already saved at local storage
+
+        // floor
+        int floor = floorController.getCurrentItem();
+        editor.putInt("floor", floor);
+
+        // time
+
+        // memo
+        String memo = memoController.getText().toString();
+        editor.putString("memo", memo);
+
+        editor.putBoolean("parked", true);
+        editor.apply();
+
+
+        setParked(true);
+    }
+
+    void loadData() {
+        SharedPreferences sharedPref = getPreferences(MODE_PRIVATE);
+
+        if (sharedPref.getBoolean("parked", false)) {
+            // picture
+            Drawable picture = myCamera.getPicture();
+            if (picture != null) {
+                pictureView.setImageDrawable(picture);
+                pictureView.setVisibility(View.VISIBLE);
+                cameraPreview.stopPreview();
+                pictureTaken = true;
+            }
+
+            // floor
+            int floor = sharedPref.getInt("floor", -1);
+            if (floor != -1) {
+                floorController.setCurrentItem(floor);
+            }
+
+            // time
+
+            // memo
+            String memo = sharedPref.getString("memo", "");
+            if (!memo.isEmpty()) {
+                memoController.setText(memo);
+            }
+
+            setParked(true);
+        }
+    }
+
+    void clearData() {
+        getPreferences(MODE_PRIVATE).edit().putBoolean("parked", false).apply();
+        setParked(false);
+
+        // picture
+        resetPictureView();
+
+        floorController.setCurrentItem(5);
+        // time to current time
+        memoController.setText("");
+    }
+
+     // etc
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -1,5 +1,8 @@
 package com.bug.parking.activity;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +21,7 @@ import com.bug.parking.R;
 import com.bug.parking.adapter.FloorAdapter;
 import com.bug.parking.camera.CameraPreview;
 import com.bug.parking.camera.MyCamera;
+import com.bug.parking.widget.MyWidgetProvider;
 
 import antistatic.spinnerwheel.AbstractWheel;
 import butterknife.*;
@@ -134,6 +138,8 @@ public class MainActivity extends AppCompatActivity {
             parkingButton.setText("Parking");
         }
 
+        updateWidget();
+
         this.parked = parked;
     }
 
@@ -235,7 +241,17 @@ public class MainActivity extends AppCompatActivity {
         memoController.setText("");
     }
 
-     // etc
+    // widget
+
+    private void updateWidget() {
+        Intent intent = new Intent(this,MyWidgetProvider.class);
+        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        int[] ids = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), MyWidgetProvider.class));
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,ids);
+        sendBroadcast(intent);
+    }
+
+    // etc
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

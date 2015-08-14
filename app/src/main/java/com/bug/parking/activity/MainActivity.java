@@ -175,8 +175,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    void saveData() {
-        SharedPreferences sharedPref = getPreferences(MODE_PRIVATE);
+    private SharedPreferences getMyPreferences() {
+        return getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE);
+    }
+
+    private void saveData() {
+        SharedPreferences sharedPref = getMyPreferences();
         SharedPreferences.Editor editor = sharedPref.edit();
 
         // picture is already saved at local storage
@@ -192,14 +196,13 @@ public class MainActivity extends AppCompatActivity {
         editor.putString("memo", memo);
 
         editor.putBoolean("parked", true);
-        editor.apply();
-
+        editor.commit();
 
         setParked(true);
     }
 
-    void loadData() {
-        SharedPreferences sharedPref = getPreferences(MODE_PRIVATE);
+    private void loadData() {
+        SharedPreferences sharedPref = getMyPreferences();
 
         if (sharedPref.getBoolean("parked", false)) {
             // picture
@@ -229,8 +232,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    void clearData() {
-        getPreferences(MODE_PRIVATE).edit().putBoolean("parked", false).apply();
+    private void clearData() {
+        getMyPreferences().edit().putBoolean("parked", false).commit();
         setParked(false);
 
         // picture

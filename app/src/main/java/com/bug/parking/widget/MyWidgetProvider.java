@@ -1,11 +1,12 @@
 package com.bug.parking.widget;
 
+import android.app.Activity;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.widget.RemoteViews;
 
@@ -33,7 +34,8 @@ public class MyWidgetProvider extends AppWidgetProvider {
 
             RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
                     R.layout.widget);
-            remoteViews.setImageViewBitmap(R.id.widget_picture, picture);
+
+            updateWidget(context, remoteViews);
 
 //            Intent intent = new Intent(context, SimpleWidgetProvider.class);
 //            intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
@@ -48,7 +50,7 @@ public class MyWidgetProvider extends AppWidgetProvider {
     private Bitmap getPicture(Context context) {
         String picturePath = "" + context.getExternalFilesDir(null).toString() + "/" + fileName;
 
-        File file =new File(picturePath);
+        File file = new File(picturePath);
         Bitmap picture = null;
 
         try {
@@ -58,6 +60,35 @@ public class MyWidgetProvider extends AppWidgetProvider {
         }
 
         return picture;
+    }
+
+    private void updateWidget(Context context, RemoteViews remoteViews) {
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+
+        if (sharedPref.getBoolean("parked", false)) {
+            // picture
+            Bitmap picture = getPicture(context);
+            remoteViews.setImageViewBitmap(R.id.widget_picture, picture);
+
+            // floor
+            int floor = sharedPref.getInt("floor", -1);
+            if (floor != -1) {
+                remoteViews.setTextViewText(R.id.widget_floor, "" + floor);
+            }
+
+            // time
+            remoteViews.setTextViewText(R.id.widget_time, "PM 10:32");
+
+            // memo
+            String memo = sharedPref.getString("memo", "");
+            if (!memo.isEmpty()) {
+                remoteViews.setTextViewText(R.id.widget_memo, memo);
+            }
+        } else {
+            remoteViews.setTextViewText(R.id.widget_floor, "");
+            remoteViews.setTextViewText(R.id.widget_time, "");
+            remoteViews.setTextViewText(R.id.widget_memo, "");
+        }
     }
 
 }

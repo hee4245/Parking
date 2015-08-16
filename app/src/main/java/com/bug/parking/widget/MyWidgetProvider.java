@@ -11,6 +11,7 @@ import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.bug.parking.R;
+import com.bug.parking.data.FloorData;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -73,7 +74,7 @@ public class MyWidgetProvider extends AppWidgetProvider {
             // floor
             int floor = sharedPref.getInt("floor", -1);
             if (floor != -1) {
-                remoteViews.setTextViewText(R.id.widget_floor, "" + floor);
+                remoteViews.setTextViewText(R.id.widget_floor, "" + FloorData.getItem(floor));
             }
 
             // time

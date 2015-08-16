@@ -21,6 +21,7 @@ import com.bug.parking.R;
 import com.bug.parking.adapter.FloorAdapter;
 import com.bug.parking.camera.CameraPreview;
 import com.bug.parking.camera.MyCamera;
+import com.bug.parking.data.FloorData;
 import com.bug.parking.widget.MyWidgetProvider;
 
 import antistatic.spinnerwheel.AbstractWheel;
@@ -29,11 +30,10 @@ import butterknife.*;
 public class MainActivity extends AppCompatActivity {
     private MyCamera myCamera;
     private CameraPreview cameraPreview;
+    private float whratio = 3.0f / 5.0f;
     private boolean pictureTaking = false;
     private boolean pictureTaken = false;
     private boolean parked = false;
-
-    String[] floors = new String[]{"B5", "B4", "B3", "B2", "B1", "1F", "2F", "3F", "4F", "5F"};
 
     @Bind(R.id.cameraLayout)
     protected  FrameLayout cameraLayout;
@@ -51,17 +51,6 @@ public class MainActivity extends AppCompatActivity {
     public interface Callback {
         public void callback();
     }
-    public Callback afterTakePicture = new Callback() {
-        @Override
-        public void callback() {
-            Drawable picture = myCamera.getPicture();
-            pictureView.setImageDrawable(picture);
-            pictureView.setVisibility(View.VISIBLE);
-            cameraPreview.stopPreview();
-            pictureTaking = false;
-            pictureTaken = true;
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        initFloorController();
     }
 
     @Override
@@ -77,17 +67,13 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
 
         initCamera();
-        initFloorController();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
 
-        cameraPreviewLayout.removeView(cameraPreview);
-        cameraPreview = null;
-        myCamera.destoryCamera();
-        myCamera = null;
+        removeCamera();
     }
 
     @Override
@@ -100,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onGlobalLayout() {
                 int width = cameraLayout.getWidth();
-                int height = width * 3 / 5;
+                int height = Math.round(width * whratio);
                 RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(width, height);
                 cameraLayout.setLayoutParams(layoutParams);
             }
@@ -114,17 +100,59 @@ public class MainActivity extends AppCompatActivity {
 
     // init
 
+    private void initFloorController() {
+//        floorController.setVisibleItems(7);
+        floorController.setViewAdapter(new FloorAdapter(this, FloorData.getData()));
+        floorController.setCurrentItem(5);
+    }
+
     private void initCamera() {
         myCamera = new MyCamera(this, afterTakePicture);
         cameraPreview = new CameraPreview(this,  myCamera.getCamera());
         cameraPreviewLayout.addView(cameraPreview);
     }
 
-    private void initFloorController() {
-//        floorController.setVisibleItems(7);
-        floorController.setViewAdapter(new FloorAdapter(this, floors));
-        floorController.setCurrentItem(5);
+    private void removeCamera() {
+        cameraPreviewLayout.removeView(cameraPreview);
+        cameraPreview = null;
+        myCamera.destoryCamera();
+        myCamera = null;
     }
+
+    // picture
+
+    @OnClick(R.id.cameraButton)
+    void onCameraButtonClick() {
+        if (!pictureTaken) {
+            if (!pictureTaking) {
+                pictureTaking = true;
+                myCamera.takePicture();
+            }
+        } else {
+            resetPictureView();
+        }
+    }
+
+    public Callback afterTakePicture = new Callback() {
+        @Override
+        public void callback() {
+            Drawable picture = myCamera.getPicture();
+            pictureView.setImageDrawable(picture);
+            pictureView.setVisibility(View.VISIBLE);
+            cameraPreview.stopPreview();
+            pictureTaking = false;
+            pictureTaken = true;
+        }
+    };
+
+    private void resetPictureView() {
+        cameraPreview.startPreview();
+        pictureView.setVisibility(View.INVISIBLE);
+        pictureTaking = false;
+        pictureTaken = false;
+    }
+
+    // parking
 
     private boolean isParked() {
         return parked;
@@ -143,29 +171,6 @@ public class MainActivity extends AppCompatActivity {
         this.parked = parked;
     }
 
-    // picture
-
-    @OnClick(R.id.cameraButton)
-    void onCameraButtonClick() {
-        if (!pictureTaken) {
-            if (!pictureTaking) {
-                pictureTaking = true;
-                myCamera.takePicture();
-            }
-        } else {
-            resetPictureView();
-        }
-    }
-
-    private void resetPictureView() {
-        cameraPreview.startPreview();
-        pictureView.setVisibility(View.INVISIBLE);
-        pictureTaking = false;
-        pictureTaken = false;
-    }
-
-    // save & load
-
     @OnClick(R.id.parking)
     void onParkingButtonClick() {
         if (!isParked()) {
@@ -174,6 +179,8 @@ public class MainActivity extends AppCompatActivity {
             clearData();
         }
     }
+
+    // save & load
 
     private SharedPreferences getMyPreferences() {
         return getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE);

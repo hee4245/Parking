@@ -80,17 +80,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
+        initCameraLayout();
         loadData();
-
-        cameraLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                int width = cameraLayout.getWidth();
-                int height = Math.round(width * whratio);
-                RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(width, height);
-                cameraLayout.setLayoutParams(layoutParams);
-            }
-        });
     }
 
 //    @Override
@@ -106,9 +97,21 @@ public class MainActivity extends AppCompatActivity {
         floorController.setCurrentItem(5);
     }
 
+    private void initCameraLayout() {
+        cameraLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                int width = cameraLayout.getWidth();
+                int height = Math.round(width * whratio);
+                RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(width, height);
+                cameraLayout.setLayoutParams(layoutParams);
+            }
+        });
+    }
+
     private void initCamera() {
         myCamera = new MyCamera(this, afterTakePicture);
-        cameraPreview = new CameraPreview(this,  myCamera.getCamera());
+        cameraPreview = new CameraPreview(this, myCamera.getCamera());
         cameraPreviewLayout.addView(cameraPreview);
     }
 
@@ -161,9 +164,9 @@ public class MainActivity extends AppCompatActivity {
     private void setParked(boolean parked) {
         // change parking button
         if (parked) {
-            parkingButton.setText("Find");
+            parkingButton.setText(getResources().getString(R.string.find));
         } else {
-            parkingButton.setText("Parking");
+            parkingButton.setText(getResources().getString(R.string.parking));
         }
 
         updateWidget();
@@ -236,18 +239,24 @@ public class MainActivity extends AppCompatActivity {
             }
 
             setParked(true);
+        } else {
+            clearData();
         }
     }
 
     private void clearData() {
         getMyPreferences().edit().putBoolean("parked", false).commit();
         setParked(false);
+        clearDataView();
+    }
 
+    private void clearDataView() {
         // picture
         resetPictureView();
-
+        // floor to "1F"
         floorController.setCurrentItem(5);
         // time to current time
+        // clear memo
         memoController.setText("");
     }
 

@@ -23,6 +23,8 @@ import com.bug.parking.camera.CameraPreview;
 import com.bug.parking.camera.MyCamera;
 import com.bug.parking.data.FloorData;
 import com.bug.parking.widget.MyWidgetProvider;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 import antistatic.spinnerwheel.AbstractWheel;
 import butterknife.*;
@@ -60,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         initFloorController();
+        initAD();
     }
 
     @Override
@@ -120,6 +123,12 @@ public class MainActivity extends AppCompatActivity {
         cameraPreview = null;
         myCamera.destoryCamera();
         myCamera = null;
+    }
+
+    private void initAD() {
+        AdView mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().addTestDevice("F65DD339F469FA0EEC3E6EB7924A1FA9").build();
+        mAdView.loadAd(adRequest);
     }
 
     // picture

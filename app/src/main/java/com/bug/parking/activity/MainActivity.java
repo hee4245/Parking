@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.bug.parking.R;
@@ -23,6 +24,7 @@ import com.bug.parking.camera.CameraPreview;
 import com.bug.parking.camera.MyCamera;
 import com.bug.parking.data.FloorData;
 import com.bug.parking.widget.MyWidgetProvider;
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
@@ -32,7 +34,7 @@ import butterknife.*;
 public class MainActivity extends AppCompatActivity {
     private MyCamera myCamera;
     private CameraPreview cameraPreview;
-    private float whratio = 3.0f / 5.0f;
+    private float whratio = 2.0f / 3.0f;
     private boolean pictureTaking = false;
     private boolean pictureTaken = false;
     private boolean parked = false;
@@ -49,9 +51,11 @@ public class MainActivity extends AppCompatActivity {
     protected EditText memoController;
     @Bind(R.id.parking)
     protected Button parkingButton;
+    @Bind(R.id.adView)
+    protected AdView adView;
 
     public interface Callback {
-        public void callback();
+        void callback();
     }
 
     @Override
@@ -126,9 +130,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initAD() {
-        AdView mAdView = (AdView) findViewById(R.id.adView);
+        adView.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                super.onAdLoaded();
+
+//                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(100, 50);
+//                adView.setLayoutParams(params);
+            }
+        });
         AdRequest adRequest = new AdRequest.Builder().addTestDevice("F65DD339F469FA0EEC3E6EB7924A1FA9").build();
-        mAdView.loadAd(adRequest);
+        adView.loadAd(adRequest);
     }
 
     // picture

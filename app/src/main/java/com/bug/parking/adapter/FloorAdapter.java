@@ -13,10 +13,9 @@ public class FloorAdapter extends AbstractWheelTextAdapter {
     private String floors[];
 
     public FloorAdapter(Context context, String[] floors) {
-        super(context, R.layout.floor_item, NO_RESOURCE);
+        super(context, R.layout.floor_item, R.id.floorText);
 
         this.floors = floors;
-        setItemTextResource(R.id.floorText);
     }
 
     @Override

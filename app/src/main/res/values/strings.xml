@@ -4,6 +4,8 @@
     <string name="action_settings">Settings</string>
     <string name="parking">Parking</string>
     <string name="find">Find</string>
+    <string name="left_angle">&lt;</string>
+    <string name="right_angle">&gt;</string>
 
     <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
     <!--<string name="banner_ad_unit_id">ca-app-pub-9845757682101781/7194842878</string>-->

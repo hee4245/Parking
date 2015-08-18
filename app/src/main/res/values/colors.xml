@@ -6,6 +6,7 @@
     <item name="light_gray_background" type="color">#F1F1F1</item>
     <item name="light_gray_stroke" type="color">#CDCDCD</item>
     <item name="white" type="color">#FFFFFF</item>
+    <item name="black" type="color">#000000</item>
 
     <!--<integer-array name="androidcolors">-->
         <!--<item>@color/blue</item>-->

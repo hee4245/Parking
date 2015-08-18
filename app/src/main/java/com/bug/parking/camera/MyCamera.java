@@ -6,6 +6,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
 import android.hardware.Camera;
+import android.media.AudioManager;
+import android.media.ToneGenerator;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -97,5 +99,7 @@ public class MyCamera {
 
     public void takePicture() {
         camera.takePicture(null, null, pictureCallback);
+        ToneGenerator toneGenerator = new ToneGenerator(AudioManager.STREAM_SYSTEM, 70);
+        toneGenerator.startTone(ToneGenerator.TONE_PROP_BEEP2);
     }
 }

@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.bug.parking.R;
 import com.bug.parking.adapter.FloorAdapter;
@@ -176,6 +177,11 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.parking)
     void onParkingButtonClick() {
+        if (!pictureTaken) {
+            Toast.makeText(this, "Please take a picture", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         if (!isParked()) {
             saveData();
         } else {

@@ -5,8 +5,8 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,18 +19,21 @@ import android.widget.RelativeLayout;
 
 import com.bug.parking.R;
 import com.bug.parking.adapter.FloorAdapter;
+import com.bug.parking.adapter.TimeAdapter;
 import com.bug.parking.camera.CameraPreview;
 import com.bug.parking.camera.MyCamera;
 import com.bug.parking.data.FloorData;
 import com.bug.parking.widget.MyWidgetProvider;
 
 import antistatic.spinnerwheel.AbstractWheel;
-import butterknife.*;
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity {
     private MyCamera myCamera;
     private CameraPreview cameraPreview;
-    private float whratio = 3.0f / 5.0f;
+    private float whRatio = 3.0f / 5.0f;
     private boolean pictureTaking = false;
     private boolean pictureTaken = false;
     private boolean parked = false;
@@ -47,6 +50,10 @@ public class MainActivity extends AppCompatActivity {
     protected EditText memoController;
     @Bind(R.id.parking)
     protected Button parkingButton;
+    @Bind(R.id.time_hour)
+    protected AbstractWheel timeHourController;
+    @Bind(R.id.time_minute)
+    protected AbstractWheel timeMinuteController;
 
     public interface Callback {
         public void callback();
@@ -65,8 +72,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
         initCamera();
+        initTimeController();
     }
 
     @Override
@@ -86,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onGlobalLayout() {
                 int width = cameraLayout.getWidth();
-                int height = Math.round(width * whratio);
+                int height = Math.round(width * whRatio);
                 RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(width, height);
                 cameraLayout.setLayoutParams(layoutParams);
             }
@@ -104,6 +111,12 @@ public class MainActivity extends AppCompatActivity {
 //        floorController.setVisibleItems(7);
         floorController.setViewAdapter(new FloorAdapter(this, FloorData.getData()));
         floorController.setCurrentItem(5);
+    }
+
+    private void initTimeController(){
+        timeHourController.setViewAdapter(new TimeAdapter(this, 1, 12));
+        timeMinuteController.setViewAdapter(new TimeAdapter(this, 0, 59, "%02d"));
+        timeMinuteController.setCyclic(true);
     }
 
     private void initCamera() {
@@ -228,6 +241,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             // time
+
 
             // memo
             String memo = sharedPref.getString("memo", "");

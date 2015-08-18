@@ -51,8 +51,8 @@
             android:id="@+id/controllers"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignParentTop="true"
             android:layout_above="@id/adView"
+            android:layout_alignParentTop="true"
             android:background="@color/white">
 
             <RelativeLayout
@@ -84,19 +84,14 @@
                     android:text="@string/right_angle"
                     android:textSize="23dp" />
 
-                <RelativeLayout
+
+                <antistatic.spinnerwheel.WheelHorizontalView
+                    android:id="@+id/floorController"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
                     android:layout_toLeftOf="@id/rightAngle"
-                    android:layout_toRightOf="@id/leftAngle">
-
-                    <antistatic.spinnerwheel.WheelHorizontalView
-                        android:id="@+id/floorController"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"/>
-
-                </RelativeLayout>
+                    android:layout_toRightOf="@id/leftAngle" />
 
             </RelativeLayout>
 
@@ -137,9 +132,9 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:background="@drawable/memo"
-                        app:isAllVisible="true"
                         android:gravity="center"
-                        android:text="10" />
+                        android:text="10"
+                        app:isAllVisible="true" />
 
                     <TextView
                         android:layout_width="10dp"
@@ -154,9 +149,9 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:background="@drawable/memo"
-                        app:isAllVisible="true"
                         android:gravity="center"
-                        android:text="47" />
+                        android:text="47"
+                        app:isAllVisible="true" />
 
                 </LinearLayout>
 
@@ -178,8 +173,8 @@
                     android:layout_weight="1"
                     android:background="@drawable/parking"
                     android:text="@string/parking"
-                    android:textColor="@color/white"
-                    android:textAllCaps="true"/>
+                    android:textAllCaps="true"
+                    android:textColor="@color/white" />
 
             </LinearLayout>
 

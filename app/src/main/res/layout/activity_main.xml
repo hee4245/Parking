@@ -1,4 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -11,99 +12,98 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true" />
 
-    <RelativeLayout
+    <FrameLayout
+        android:id="@+id/cameraLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true">
 
-        <FrameLayout
-            android:id="@+id/cameraLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true">
-
-            <ImageView
-                android:id="@+id/pictureView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                android:visibility="invisible" />
-
-            <Button
-                android:id="@+id/cameraButton"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/transparent" />
-        </FrameLayout>
-
-        /* banner */
-
-        <View
-            android:id="@+id/banner"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_alignParentBottom="true"
-            android:background="#0000FF" />
-
-        /* floor */
-
-        <RelativeLayout
-            android:id="@+id/floor"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_below="@id/cameraLayout"
-            android:background="@color/light_gray_background">
-
-            <TextView
-                android:id="@+id/leftAngle"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentLeft="true"
-                android:gravity="center"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:text="&lt;"
-                android:textSize="23dp" />
-
-            <TextView
-                android:id="@+id/rightAngle"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentRight="true"
-                android:gravity="center"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:text="&gt;"
-                android:textSize="23dp" />
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_toLeftOf="@id/rightAngle"
-                android:layout_toRightOf="@id/leftAngle">
-
-                <antistatic.spinnerwheel.WheelHorizontalView
-                    android:id="@+id/floorController"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    app:isAllVisible="true" />
-
-            </RelativeLayout>
-
-        </RelativeLayout>
-
-        /* 시간설정, 메모, parking */
-
-        <RelativeLayout
+        <ImageView
+            android:id="@+id/pictureView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/banner"
-            android:layout_below="@id/floor"
+            android:scaleType="centerCrop"
+            android:visibility="invisible" />
+
+        <Button
+            android:id="@+id/cameraButton"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/transparent" />
+    </FrameLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/cameraLayout"
+        android:background="@color/white">
+
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/adView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            ads:adSize="BANNER"
+            ads:adUnitId="@string/banner_ad_unit_id" />
+
+        <RelativeLayout
+            android:id="@+id/controllers"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_above="@id/adView"
             android:background="@color/white">
+
+            <RelativeLayout
+                android:id="@+id/floor"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/floor_height"
+                android:layout_alignParentTop="true"
+                android:background="@color/light_gray_background">
+
+                <TextView
+                    android:id="@+id/leftAngle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true"
+                    android:gravity="center"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:text="@string/left_angle"
+                    android:textSize="23dp" />
+
+                <TextView
+                    android:id="@+id/rightAngle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:gravity="center"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:text="@string/right_angle"
+                    android:textSize="23dp" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_toLeftOf="@id/rightAngle"
+                    android:layout_toRightOf="@id/leftAngle">
+
+                    <antistatic.spinnerwheel.WheelHorizontalView
+                        android:id="@+id/floorController"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"/>
+
+                </RelativeLayout>
+
+            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_below="@id/floor"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:layout_marginTop="15dp"
@@ -137,7 +137,9 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:background="@drawable/memo"
-                        app:isAllVisible="true" />
+                        app:isAllVisible="true"
+                        android:gravity="center"
+                        android:text="10" />
 
                     <TextView
                         android:layout_width="10dp"
@@ -152,7 +154,10 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:background="@drawable/memo"
-                        app:isAllVisible="true" />
+                        app:isAllVisible="true"
+                        android:gravity="center"
+                        android:text="47" />
+
                 </LinearLayout>
 
                 <EditText
@@ -172,9 +177,14 @@
                     android:layout_margin="15dp"
                     android:layout_weight="1"
                     android:background="@drawable/parking"
-                    android:text="PARKING"
-                    android:textColor="@color/white" />
+                    android:text="@string/parking"
+                    android:textColor="@color/white"
+                    android:textAllCaps="true"/>
+
             </LinearLayout>
+
         </RelativeLayout>
+
     </RelativeLayout>
+
 </RelativeLayout>

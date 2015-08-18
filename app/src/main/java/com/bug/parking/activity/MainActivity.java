@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.bug.parking.R;
@@ -24,6 +25,9 @@ import com.bug.parking.camera.CameraPreview;
 import com.bug.parking.camera.MyCamera;
 import com.bug.parking.data.FloorData;
 import com.bug.parking.widget.MyWidgetProvider;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 import antistatic.spinnerwheel.AbstractWheel;
 import butterknife.Bind;
@@ -54,9 +58,11 @@ public class MainActivity extends AppCompatActivity {
     protected AbstractWheel timeHourController;
     @Bind(R.id.time_minute)
     protected AbstractWheel timeMinuteController;
+    @Bind(R.id.adView)
+    protected AdView adView;
 
     public interface Callback {
-        public void callback();
+        void callback();
     }
 
     @Override
@@ -67,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         initFloorController();
+        initAD();
     }
 
     @Override
@@ -134,6 +141,11 @@ public class MainActivity extends AppCompatActivity {
         cameraPreview = null;
         myCamera.destoryCamera();
         myCamera = null;
+    }
+
+    private void initAD() {
+        AdRequest adRequest = new AdRequest.Builder().addTestDevice("F65DD339F469FA0EEC3E6EB7924A1FA9").build();
+        adView.loadAd(adRequest);
     }
 
     // picture

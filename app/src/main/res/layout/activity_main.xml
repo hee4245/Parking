@@ -132,9 +132,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:background="@drawable/memo"
-                        android:gravity="center"
-                        android:text="10"
-                        app:isAllVisible="true" />
+                        android:gravity="center" />
 
                     <TextView
                         android:layout_width="10dp"
@@ -149,9 +147,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:background="@drawable/memo"
-                        android:gravity="center"
-                        android:text="47"
-                        app:isAllVisible="true" />
+                        android:gravity="center" />
 
                 </LinearLayout>
 

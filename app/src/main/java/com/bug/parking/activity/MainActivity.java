@@ -127,7 +127,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void initTimeController(){
         timeHourController.setViewAdapter(new TimeAdapter(this, 1, 12));
+        timeHourController.setVisibleItems(0);
+
         timeMinuteController.setViewAdapter(new TimeAdapter(this, 0, 59, "%02d"));
+        timeMinuteController.setVisibleItems(0);
         timeMinuteController.setCyclic(true);
     }
 

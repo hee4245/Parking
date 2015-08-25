@@ -71,7 +71,7 @@
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
                     android:text="@string/left_angle"
-                    android:textSize="23dp" />
+                    android:textSize="@dimen/string_size_middle" />
 
                 <TextView
                     android:id="@+id/rightAngle"
@@ -82,7 +82,7 @@
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
                     android:text="@string/right_angle"
-                    android:textSize="23dp" />
+                    android:textSize="@dimen/string_size_middle" />
 
 
                 <antistatic.spinnerwheel.WheelHorizontalView
@@ -158,6 +158,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/memo"
                     android:gravity="center"
+                    android:textSize="@dimen/string_size_small"
                     android:hint="MEMO" />
 
                 <Button
@@ -169,6 +170,7 @@
                     android:background="@drawable/parking"
                     android:text="@string/parking"
                     android:textAllCaps="true"
+                    android:textSize="@dimen/string_size_small"
                     android:textColor="@color/white" />
 
             </LinearLayout>

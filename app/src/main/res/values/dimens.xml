@@ -7,5 +7,6 @@
     <dimen name="widget_margin">8dp</dimen>
     <dimen name="round">8dp</dimen>
 
+    <dimen name="string_size_small">18sp</dimen>
     <dimen name="string_size_middle">23sp</dimen>
 </resources>

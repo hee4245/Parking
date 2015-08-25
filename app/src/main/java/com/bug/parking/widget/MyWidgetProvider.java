@@ -76,7 +76,7 @@ public class MyWidgetProvider extends AppWidgetProvider {
     }
 
     private Bitmap getPicture(Context context) {
-        String picturePath = "" + context.getExternalFilesDir(null).toString() + "/" + fileName;
+        String picturePath = context.getFilesDir().toString() + "/" + fileName;
 
         File file = new File(picturePath);
         Bitmap picture = null;

@@ -2,29 +2,27 @@ package com.bug.parking.adapter;
 
 import android.content.Context;
 
-import com.bug.parking.R;
-
 import antistatic.spinnerwheel.adapters.AbstractWheelTextAdapter;
 
 /**
  * Created by json on 15. 8. 9..
  */
 public class FloorAdapter extends AbstractWheelTextAdapter {
-    private String floors[];
+    private String data[];
 
-    public FloorAdapter(Context context, String[] floors) {
-        super(context, R.layout.floor_item, R.id.floorText);
+    public FloorAdapter(Context context, String[] data, int itemResource, int itemTextResource) {
+        super(context, itemResource, itemTextResource);
 
-        this.floors = floors;
+        this.data = data;
     }
 
     @Override
     public CharSequence getItemText(int index) {
-        return floors[index];
+        return data[index];
     }
 
     @Override
     public int getItemsCount() {
-        return floors.length;
+        return data.length;
     }
 }

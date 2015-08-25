@@ -15,7 +15,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -25,10 +24,13 @@ import com.bug.parking.adapter.TimeAdapter;
 import com.bug.parking.camera.CameraPreview;
 import com.bug.parking.camera.MyCamera;
 import com.bug.parking.data.FloorData;
+import com.bug.parking.data.TimePeriodsData;
 import com.bug.parking.widget.MyWidgetProvider;
-import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+
+import java.util.Calendar;
+import java.util.TimeZone;
 
 import antistatic.spinnerwheel.AbstractWheel;
 import butterknife.Bind;
@@ -59,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
     protected AbstractWheel timeHourController;
     @Bind(R.id.time_minute)
     protected AbstractWheel timeMinuteController;
+    @Bind(R.id.time_periods)
+    protected AbstractWheel timePeriodsController;
     @Bind(R.id.adView)
     protected AdView adView;
 
@@ -108,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initFloorController() {
 //        floorController.setVisibleItems(7);
-        floorController.setViewAdapter(new FloorAdapter(this, FloorData.getData()));
+        floorController.setViewAdapter(new FloorAdapter(this, FloorData.getData(),R.layout.floor_item, R.id.floorText));
         floorController.setCurrentItem(5);
     }
 
@@ -125,7 +129,11 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+
     private void initTimeController(){
+        timePeriodsController.setViewAdapter(new FloorAdapter(this, TimePeriodsData.getData(), R.layout.time_item, R.id.timeText));
+        timePeriodsController.setVisibleItems(0);
+
         timeHourController.setViewAdapter(new TimeAdapter(this, 1, 12));
         timeHourController.setVisibleItems(0);
 
@@ -235,6 +243,12 @@ public class MainActivity extends AppCompatActivity {
         editor.putInt("floor", floor);
 
         // time
+        int hour = timeHourController.getCurrentItem();
+        int minute = timeMinuteController.getCurrentItem();
+        int period = timePeriodsController.getCurrentItem();
+        editor.putInt("hour",hour);
+        editor.putInt("minute",minute);
+        editor.putInt("period",period);
 
         // memo
         String memo = memoController.getText().toString();
@@ -266,6 +280,18 @@ public class MainActivity extends AppCompatActivity {
             }
 
             // time
+            int period = sharedPref.getInt("period",-1);
+            int hour = sharedPref.getInt("hour",-1);
+            int minute = sharedPref.getInt("minute",-1);
+            if(period != -1){
+                timePeriodsController.setCurrentItem(period);
+            }
+            if(hour != -1){
+                timeHourController.setCurrentItem(hour);
+            }
+            if(minute != -1){
+                timeMinuteController.setCurrentItem(minute);
+            }
 
 
             // memo
@@ -291,7 +317,14 @@ public class MainActivity extends AppCompatActivity {
         resetPictureView();
         // floor to "1F"
         floorController.setCurrentItem(5);
+
         // time to current time
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT+9:00"));
+
+        timeHourController.setCurrentItem(calendar.get(Calendar.HOUR) - 1);
+        timeMinuteController.setCurrentItem(calendar.get(Calendar.MINUTE));
+        timePeriodsController.setCurrentItem(calendar.get(Calendar.AM_PM));
+
         // clear memo
         memoController.setText("");
     }

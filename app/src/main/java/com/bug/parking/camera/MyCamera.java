@@ -7,11 +7,9 @@ import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
 import android.hardware.Camera;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.bug.parking.activity.MainActivity;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -57,10 +55,10 @@ public class MyCamera {
         pictureCallback = new Camera.PictureCallback() {
             @Override
             public void onPictureTaken(byte[] data, Camera camera) {
-                File file = new File(context.getExternalFilesDir(null), fileName);
+//                File file = new File(context.getExternalFilesDir(null), fileName);
                 FileOutputStream fos = null;
                 try {
-                    fos = new FileOutputStream(file);
+                    fos = context.openFileOutput(fileName, Context.MODE_PRIVATE);
 
                     Matrix matrix = new Matrix();
                     matrix.setRotate(90.0f);
@@ -86,7 +84,8 @@ public class MyCamera {
     }
 
     private String getPicturePath() {
-        return "" + context.getExternalFilesDir(null).toString() + "/" + fileName;
+//        return "" + context.getExternalFilesDir(null).toString() + "/" + fileName;
+        return context.getFilesDir().toString() + "/" + fileName;
     }
 
     public Camera getCamera() {

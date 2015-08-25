@@ -113,14 +113,13 @@
                     android:gravity="center"
                     android:orientation="horizontal">
 
-                    <TextView
+                    <antistatic.spinnerwheel.WheelVerticalView
                         android:id="@+id/time_periods"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:background="@drawable/memo"
-                        android:gravity="center"
-                        android:text="PM" />
+                        android:gravity="center" />
 
                     <TextView
                         android:layout_width="10dp"

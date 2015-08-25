@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <item name="primary" type="color">#FF00B1</item>
+    <item name="primary" type="color">#FF1691</item>
     <item name="transparent" type="color">#00000000</item>
     <item name="light_gray_background" type="color">#F1F1F1</item>
     <item name="light_gray_stroke" type="color">#CDCDCD</item>

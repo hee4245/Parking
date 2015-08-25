@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,6 +15,7 @@ import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -77,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        initActionBar();
         initFloorController();
         initAD();
     }
@@ -110,8 +113,22 @@ public class MainActivity extends AppCompatActivity {
 
     // init
 
+    private void initActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+
+        actionBar.setCustomView(R.layout.custom_actionbar);
+        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+
+        ImageButton settingButton = (ImageButton) actionBar.getCustomView().findViewById(R.id.setting);
+        settingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "setting", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     private void initFloorController() {
-//        floorController.setVisibleItems(7);
         floorController.setViewAdapter(new FloorAdapter(this, FloorData.getData(),R.layout.floor_item, R.id.floorText));
         floorController.setCurrentItem(5);
     }
@@ -353,12 +370,12 @@ public class MainActivity extends AppCompatActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+//        int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
 
         return super.onOptionsItemSelected(item);
     }

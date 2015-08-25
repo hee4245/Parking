@@ -15,6 +15,7 @@ import android.widget.RemoteViews;
 
 import com.bug.parking.R;
 import com.bug.parking.data.FloorData;
+import com.bug.parking.data.TimePeriodsData;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -101,11 +102,17 @@ public class MyWidgetProvider extends AppWidgetProvider {
             // floor
             int floor = sharedPref.getInt("floor", -1);
             if (floor != -1) {
-                remoteViews.setTextViewText(R.id.widget_floor, "" + FloorData.getItem(floor));
+                remoteViews.setTextViewText(R.id.widget_floor, FloorData.getItem(floor));
             }
 
             // time
-            remoteViews.setTextViewText(R.id.widget_time, "PM 10:32");
+            int period = sharedPref.getInt("period", -1);
+            int hour = sharedPref.getInt("hour", -1);
+            int minute = sharedPref.getInt("minute", -1);
+            if (period != -1 && hour != -1 && minute != -1) {
+                String time = TimePeriodsData.getItem(period) + " " + String.format("%02d", hour+1) + ":" + String.format("%02d", minute);
+                remoteViews.setTextViewText(R.id.widget_time, time);
+            }
 
             // memo
             String memo = sharedPref.getString("memo", "");

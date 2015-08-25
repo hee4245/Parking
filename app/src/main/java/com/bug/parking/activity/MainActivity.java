@@ -231,12 +231,11 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.parking)
     void onParkingButtonClick() {
-        if (!pictureTaken) {
-            Toast.makeText(this, "Please take a picture", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
         if (!isParked()) {
+            if (!pictureTaken) {
+                Toast.makeText(this, "Please take a picture", Toast.LENGTH_SHORT).show();
+                return;
+            }
             saveData();
         } else {
             clearData();

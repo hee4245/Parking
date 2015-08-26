@@ -19,28 +19,30 @@
             android:layout_centerVertical="true">
 
             <LinearLayout
-                android:layout_width="80dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/widget_margin"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/widget_floor"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="center"
+                    android:textSize="@dimen/string_size_small"/>
 
                 <TextView
                     android:id="@+id/widget_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-
-                <TextView
-                    android:id="@+id/widget_memo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="center"
+                    android:textSize="@dimen/string_size_small"/>
 
                 <Button
                     android:id="@+id/widget_find"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/find" />
 
@@ -48,12 +50,26 @@
 
         </RelativeLayout>
 
-        <ImageView
-            android:id="@+id/widget_picture"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_toLeftOf="@id/widget_data"
-            android:scaleType="fitCenter" />
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@id/widget_data">
+
+            <ImageView
+                android:id="@+id/widget_picture"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:scaleType="fitCenter" />
+
+            <TextView
+                android:id="@+id/widget_memo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentBottom="true" />
+
+        </RelativeLayout>
 
     </RelativeLayout>
 

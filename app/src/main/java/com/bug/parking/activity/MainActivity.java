@@ -1,5 +1,9 @@
 package com.bug.parking.activity;
 
+import android.app.DialogFragment;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Intent;
@@ -27,6 +31,7 @@ import com.bug.parking.camera.CameraPreview;
 import com.bug.parking.camera.MyCamera;
 import com.bug.parking.data.FloorData;
 import com.bug.parking.data.TimePeriodsData;
+import com.bug.parking.fragment.SettingFragment;
 import com.bug.parking.widget.MyWidgetProvider;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -123,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
         settingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "setting", Toast.LENGTH_SHORT).show();
+                openSettingFragment();
             }
         });
     }
@@ -353,6 +358,21 @@ public class MainActivity extends AppCompatActivity {
         int[] ids = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), MyWidgetProvider.class));
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,ids);
         sendBroadcast(intent);
+    }
+
+    // setting
+
+    private void openSettingFragment() {
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        Fragment prevFragment = fragmentManager.findFragmentByTag("dialog");
+        if (prevFragment != null) {
+            fragmentTransaction.remove(prevFragment);
+        }
+        fragmentTransaction.addToBackStack(null);
+
+        DialogFragment settingFragment = new SettingFragment();
+        settingFragment.show(fragmentTransaction, "dialog");
     }
 
     // etc

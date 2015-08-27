@@ -21,7 +21,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.bug.parking.R;
-import com.bug.parking.adapter.FloorAdapter;
+import com.bug.parking.adapter.TextAdapter;
 import com.bug.parking.adapter.TimeAdapter;
 import com.bug.parking.camera.CameraPreview;
 import com.bug.parking.camera.MyCamera;
@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initFloorController() {
-        floorController.setViewAdapter(new FloorAdapter(this, FloorData.getData(),R.layout.floor_item, R.id.floorText));
+        floorController.setViewAdapter(new TextAdapter(this, FloorData.getData(),R.layout.floor_item, R.id.floorText));
         floorController.setCurrentItem(5);
     }
 
@@ -148,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void initTimeController(){
-        timePeriodsController.setViewAdapter(new FloorAdapter(this, TimePeriodsData.getData(), R.layout.time_item, R.id.timeText));
+        timePeriodsController.setViewAdapter(new TextAdapter(this, TimePeriodsData.getData(), R.layout.time_item, R.id.timeText));
         timePeriodsController.setVisibleItems(0);
 
         timeHourController.setViewAdapter(new TimeAdapter(this, 1, 12));

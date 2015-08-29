@@ -160,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initCamera() {
-        myCamera = new MyCamera(this, afterTakePicture);
+        myCamera = new MyCamera(this, afterTakePicture, whRatio);
         cameraPreview = new CameraPreview(this, myCamera.getCamera());
         cameraPreviewLayout.addView(cameraPreview);
     }

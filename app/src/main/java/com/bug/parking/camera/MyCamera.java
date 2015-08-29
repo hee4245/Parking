@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
 import android.hardware.Camera;
+import android.os.Handler;
 import android.util.Log;
 
 import com.bug.parking.activity.MainActivity;
@@ -25,11 +26,13 @@ public class MyCamera {
     private Camera camera;
     private Camera.PictureCallback pictureCallback;
     private MainActivity.Callback afterTakePicture;
+    private float whRatio;
 
-    public MyCamera(Context context, MainActivity.Callback afterTakePicture) {
+    public MyCamera(Context context, MainActivity.Callback afterTakePicture, float whRatio) {
         try {
             this.context = context;
             this.afterTakePicture = afterTakePicture;
+            this.whRatio = whRatio;
 
             initCamera();
             initPicktureCallback();
@@ -55,32 +58,47 @@ public class MyCamera {
         pictureCallback = new Camera.PictureCallback() {
             @Override
             public void onPictureTaken(byte[] data, Camera camera) {
-//                File file = new File(context.getExternalFilesDir(null), fileName);
-                FileOutputStream fos = null;
-                try {
-                    fos = context.openFileOutput(fileName, Context.MODE_PRIVATE);
-
-                    Matrix matrix = new Matrix();
-                    matrix.setRotate(90.0f);
-
-                    Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-                    Bitmap cropedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getHeight() * 3 / 5, bitmap.getHeight(), matrix, true);
-//                    Toast.makeText(context, ""+bitmap.getWidth()+","+bitmap.getHeight(), Toast.LENGTH_LONG).show();
-//                    Bitmap cropedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-                    cropedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
-
-//                    fos.write(data);
-//                    fos.flush();
-                    fos.close();
-
-                    afterTakePicture.callback();
-                } catch (FileNotFoundException e) {
-                    Log.d(TAG, "File not found: " + e.getMessage());
-                } catch (IOException e) {
-                    Log.d(TAG, "Error accessing file: " + e.getMessage());
-                }
+                Handler handler = new Handler();
+                handler.post(new SavePhotoRunnable(data));
             }
         };
+    }
+
+    private class SavePhotoRunnable implements Runnable {
+        byte[] data;
+
+        public SavePhotoRunnable(byte[] data) {
+            this.data = data;
+        }
+
+        public void run() {
+            savePhoto(data);
+        }
+    }
+
+    private void savePhoto(byte[] data) {
+
+        FileOutputStream fos;
+        try {
+            fos = context.openFileOutput(fileName, Context.MODE_PRIVATE);
+
+            Matrix matrix = new Matrix();
+            matrix.setRotate(90.0f);
+
+            Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+            Bitmap croppedBitmap = Bitmap.createBitmap(bitmap, 0, 0, Math.round(bitmap.getHeight() * whRatio), bitmap.getHeight(), matrix, true);
+//                Toast.makeText(context, ""+bitmap.getWidth()+","+bitmap.getHeight(), Toast.LENGTH_LONG).show();
+            croppedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+//                fos.write(data);
+//                fos.flush();
+            fos.close();
+
+            afterTakePicture.callback();
+        } catch (FileNotFoundException e) {
+            Log.d(TAG, "File not found: " + e.getMessage());
+        } catch (IOException e) {
+            Log.d(TAG, "Error accessing file: " + e.getMessage());
+        }
     }
 
     private String getPicturePath() {

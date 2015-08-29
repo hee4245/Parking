@@ -2,6 +2,7 @@
 <resources>
 
     <item name="primary" type="color">#FF1691</item>
+    <item name="primary_dark" type="color">#D2186B</item>
     <item name="transparent" type="color">#00000000</item>
     <item name="light_gray_background" type="color">#F1F1F1</item>
     <item name="light_gray_stroke" type="color">#CDCDCD</item>

@@ -5,6 +5,7 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/primary</item>
         <item name="colorButtonNormal">@color/primary</item>
+        <item name="android:colorPrimaryDark">@color/primary_dark</item>
         <!--<item name="android:actionBarStyle">@style/MyActionBar</item>-->
 
         <!--<style name="MyActionBar" parent="Theme.AppCompat.">-->

@@ -22,10 +22,10 @@
  * limitations under the License.
  */
 
-/*
+/**
  * AbstractWheelCustomAdapter
- * Copyright 2015 mayTree
- */
+ * Created by json on 15.8.30..
+ **/
 
 package antistatic.spinnerwheel.adapters;
 

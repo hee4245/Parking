@@ -138,7 +138,7 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text=":"
-                        android:textSize="23dp" />
+                        android:textSize="@dimen/string_size_middle" />
 
                     <antistatic.spinnerwheel.WheelVerticalView
                         android:id="@+id/time_minute"

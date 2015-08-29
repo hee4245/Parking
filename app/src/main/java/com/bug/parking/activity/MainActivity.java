@@ -48,9 +48,9 @@ public class MainActivity extends AppCompatActivity {
     private boolean parked = false;
 
     @Bind(R.id.cameraLayout)
-    protected  FrameLayout cameraLayout;
+    protected FrameLayout cameraLayout;
     @Bind(R.id.cameraPreview)
-    protected  FrameLayout cameraPreviewLayout;
+    protected FrameLayout cameraPreviewLayout;
     @Bind(R.id.pictureView)
     protected ImageView pictureView;
     @Bind(R.id.floorController)
@@ -181,6 +181,9 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.cameraButton)
     void onCameraButtonClick() {
+        if (parked)
+            return;
+
         if (!pictureTaken) {
             if (!pictureTaking) {
                 pictureTaking = true;
@@ -274,6 +277,8 @@ public class MainActivity extends AppCompatActivity {
         editor.commit();
 
         setParked(true);
+
+        setControllersEnabled(false);
     }
 
     private void loadData() {
@@ -326,6 +331,7 @@ public class MainActivity extends AppCompatActivity {
         getMyPreferences().edit().putBoolean("parked", false).commit();
         setParked(false);
         clearDataView();
+        setControllersEnabled(true);
     }
 
     private void clearDataView() {
@@ -343,6 +349,14 @@ public class MainActivity extends AppCompatActivity {
 
         // clear memo
         memoController.setText("");
+    }
+
+    private void setControllersEnabled(boolean enable) {
+        floorController.setEnabled(enable);
+        timePeriodsController.setEnabled(enable);
+        timeHourController.setEnabled(enable);
+        timeMinuteController.setEnabled(enable);
+        memoController.setEnabled(enable);
     }
 
     // widget

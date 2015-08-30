@@ -1,5 +1,9 @@
 package com.bug.parking.activity;
 
+import android.app.DialogFragment;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Intent;
@@ -27,6 +31,8 @@ import com.bug.parking.camera.CameraPreview;
 import com.bug.parking.camera.MyCamera;
 import com.bug.parking.data.FloorData;
 import com.bug.parking.data.TimePeriodsData;
+import com.bug.parking.fragment.SettingFragment;
+import com.bug.parking.manager.ThemeManager;
 import com.bug.parking.widget.MyWidgetProvider;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -46,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean pictureTaking = false;
     private boolean pictureTaken = false;
     private boolean parked = false;
+    private ThemeManager themeManager;
 
     @Bind(R.id.cameraLayout)
     protected FrameLayout cameraLayout;
@@ -76,12 +83,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        initTheme();
+
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
         initActionBar();
         initFloorController();
         initAD();
+        initColors();
     }
 
     @Override
@@ -113,6 +123,16 @@ public class MainActivity extends AppCompatActivity {
 
     // init
 
+    private void initTheme() {
+        themeManager = new ThemeManager(this);
+
+        SharedPreferences sharedPref = getMyPreferences();
+        int themeIndex = sharedPref.getInt("theme", 0);
+        themeManager.setCurrentThemeIndex(themeIndex);
+
+        setTheme(themeManager.getCurrentThemeResource());
+    }
+
     private void initActionBar() {
         ActionBar actionBar = getSupportActionBar();
 
@@ -123,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
         settingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "setting", Toast.LENGTH_SHORT).show();
+                openSettingFragment();
             }
         });
     }
@@ -132,7 +152,6 @@ public class MainActivity extends AppCompatActivity {
         floorController.setViewAdapter(new TextAdapter(this, FloorData.getData(),R.layout.floor_item, R.id.floorText));
         floorController.setCurrentItem(5);
     }
-
 
     private void initCameraLayout() {
         cameraLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -145,7 +164,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
 
     private void initTimeController(){
         timePeriodsController.setViewAdapter(new TextAdapter(this, TimePeriodsData.getData(), R.layout.time_item, R.id.timeText));
@@ -163,6 +181,10 @@ public class MainActivity extends AppCompatActivity {
         myCamera = new MyCamera(this, afterTakePicture, whRatio);
         cameraPreview = new CameraPreview(this, myCamera.getCamera());
         cameraPreviewLayout.addView(cameraPreview);
+    }
+
+    private void initColors() {
+        parkingButton.setBackgroundResource(themeManager.getCurrentButtonStyleResource());
     }
 
     private void removeCamera() {
@@ -227,6 +249,7 @@ public class MainActivity extends AppCompatActivity {
             parkingButton.setText(getResources().getString(R.string.parking));
         }
 
+        setControllersEnabled(!parked);
         updateWidget();
 
         this.parked = parked;
@@ -247,7 +270,7 @@ public class MainActivity extends AppCompatActivity {
 
     // save & load
 
-    private SharedPreferences getMyPreferences() {
+    public SharedPreferences getMyPreferences() {
         return getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE);
     }
 
@@ -277,8 +300,6 @@ public class MainActivity extends AppCompatActivity {
         editor.commit();
 
         setParked(true);
-
-        setControllersEnabled(false);
     }
 
     private void loadData() {
@@ -313,7 +334,6 @@ public class MainActivity extends AppCompatActivity {
             if(minute != -1){
                 timeMinuteController.setCurrentItem(minute);
             }
-
 
             // memo
             String memo = sharedPref.getString("memo", "");
@@ -367,6 +387,27 @@ public class MainActivity extends AppCompatActivity {
         int[] ids = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), MyWidgetProvider.class));
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,ids);
         sendBroadcast(intent);
+    }
+
+    // setting
+
+    private void openSettingFragment() {
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        Fragment prevFragment = fragmentManager.findFragmentByTag("dialog");
+        if (prevFragment != null) {
+            fragmentTransaction.remove(prevFragment);
+        }
+        fragmentTransaction.addToBackStack(null);
+
+        DialogFragment settingFragment = new SettingFragment();
+        settingFragment.show(fragmentTransaction, "dialog");
+    }
+
+    // theme
+
+    public ThemeManager getThemeManager() {
+        return themeManager;
     }
 
     // etc

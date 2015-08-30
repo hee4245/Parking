@@ -63,6 +63,8 @@ public class MainActivity extends AppCompatActivity {
     protected ImageView pictureView;
     @Bind(R.id.floorController)
     protected AbstractWheel floorController;
+    @Bind(R.id.floor_indicator)
+    protected View floorIndicator;
     @Bind(R.id.memo)
     protected EditText memoController;
     @Bind(R.id.parking)
@@ -91,8 +93,8 @@ public class MainActivity extends AppCompatActivity {
 
         initActionBar();
         initFloorController();
-        initAD();
         initColors();
+        initAD();
     }
 
     @Override
@@ -154,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initFloorController() {
-        floorController.setViewAdapter(new TextAdapter(this, FloorData.getData(),R.layout.floor_item, R.id.floorText));
+        floorController.setViewAdapter(new TextAdapter(this, FloorData.getData(), R.layout.floor_item, R.id.floorText));
         floorController.setCurrentItem(5);
     }
 
@@ -188,15 +190,16 @@ public class MainActivity extends AppCompatActivity {
         cameraPreviewLayout.addView(cameraPreview);
     }
 
-    private void initColors() {
-        parkingButton.setBackgroundResource(themeManager.getCurrentButtonStyleResource());
-    }
-
     private void removeCamera() {
         cameraPreviewLayout.removeView(cameraPreview);
         cameraPreview = null;
         myCamera.destoryCamera();
         myCamera = null;
+    }
+
+    private void initColors() {
+        parkingButton.setBackgroundResource(themeManager.getCurrentButtonStyleResource());
+        floorIndicator.setBackgroundColor(themeManager.getCurrentPrimaryColor());
     }
 
     private void initAD() {

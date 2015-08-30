@@ -1,6 +1,10 @@
 <resources>
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="floor_height">60dp</dimen>
+    <dimen name="floor_item_width">50dp</dimen>
+    <dimen name="floor_indicator_width">40dp</dimen>
+    <dimen name="floor_indicator_height">5dp</dimen>
+    <dimen name="floor_indicator_position">40dp</dimen>
 
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>

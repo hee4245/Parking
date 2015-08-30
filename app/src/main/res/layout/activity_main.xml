@@ -83,14 +83,33 @@
                     android:text="@string/right_angle"
                     android:textSize="@dimen/string_size_middle" />
 
-
-                <antistatic.spinnerwheel.WheelHorizontalView
-                    android:id="@+id/floorController"
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_toLeftOf="@id/rightAngle"
-                    android:layout_toRightOf="@id/leftAngle" />
+                    android:layout_toRightOf="@id/leftAngle">
+
+                    <antistatic.spinnerwheel.WheelHorizontalView
+                        android:id="@+id/floorController"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true" />
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/floor_indicator_position"
+                        android:layout_centerInParent="true">
+
+                        <View
+                            android:id="@+id/floor_indicator"
+                            android:layout_width="@dimen/floor_indicator_width"
+                            android:layout_height="@dimen/floor_indicator_height"
+                            android:layout_alignParentBottom="true"/>
+
+                    </RelativeLayout>
+
+                </RelativeLayout>
 
             </RelativeLayout>
 

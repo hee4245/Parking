@@ -32,6 +32,7 @@ import com.bug.parking.camera.MyCamera;
 import com.bug.parking.data.FloorData;
 import com.bug.parking.data.TimePeriodsData;
 import com.bug.parking.fragment.SettingFragment;
+import com.bug.parking.manager.ThemeManager;
 import com.bug.parking.widget.MyWidgetProvider;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -51,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean pictureTaking = false;
     private boolean pictureTaken = false;
     private boolean parked = false;
+    private ThemeManager themeManager;
 
     @Bind(R.id.cameraLayout)
     protected  FrameLayout cameraLayout;
@@ -81,12 +83,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        initTheme();
+
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
         initActionBar();
         initFloorController();
         initAD();
+        initColors();
     }
 
     @Override
@@ -118,6 +123,16 @@ public class MainActivity extends AppCompatActivity {
 
     // init
 
+    private void initTheme() {
+        themeManager = new ThemeManager(this);
+
+        SharedPreferences sharedPref = getMyPreferences();
+        int themeIndex = sharedPref.getInt("theme", 0);
+        themeManager.setCurrentThemeIndex(themeIndex);
+
+        setTheme(themeManager.getCurrentThemeResource());
+    }
+
     private void initActionBar() {
         ActionBar actionBar = getSupportActionBar();
 
@@ -134,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initFloorController() {
-        floorController.setViewAdapter(new FloorAdapter(this, FloorData.getData(),R.layout.floor_item, R.id.floorText));
+        floorController.setViewAdapter(new FloorAdapter(this, FloorData.getData(), R.layout.floor_item, R.id.floorText));
         floorController.setCurrentItem(5);
     }
 
@@ -168,6 +183,10 @@ public class MainActivity extends AppCompatActivity {
         myCamera = new MyCamera(this, afterTakePicture);
         cameraPreview = new CameraPreview(this, myCamera.getCamera());
         cameraPreviewLayout.addView(cameraPreview);
+    }
+
+    private void initColors() {
+        parkingButton.setBackgroundResource(themeManager.getCurrentButtonStyleResource());
     }
 
     private void removeCamera() {
@@ -249,7 +268,7 @@ public class MainActivity extends AppCompatActivity {
 
     // save & load
 
-    private SharedPreferences getMyPreferences() {
+    public SharedPreferences getMyPreferences() {
         return getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE);
     }
 
@@ -373,6 +392,12 @@ public class MainActivity extends AppCompatActivity {
 
         DialogFragment settingFragment = new SettingFragment();
         settingFragment.show(fragmentTransaction, "dialog");
+    }
+
+    // theme
+
+    public ThemeManager getThemeManager() {
+        return themeManager;
     }
 
     // etc

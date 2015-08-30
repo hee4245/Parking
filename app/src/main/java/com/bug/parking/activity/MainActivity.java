@@ -9,6 +9,7 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -131,6 +132,10 @@ public class MainActivity extends AppCompatActivity {
         themeManager.setCurrentThemeIndex(themeIndex);
 
         setTheme(themeManager.getCurrentThemeResource());
+
+        if (Build.VERSION.SDK_INT >= 21) {
+            getWindow().setStatusBarColor(themeManager.getCurrentPrimaryDarkColor());
+        }
     }
 
     private void initActionBar() {
@@ -290,7 +295,7 @@ public class MainActivity extends AppCompatActivity {
         int period = timePeriodsController.getCurrentItem();
         editor.putInt("hour",hour);
         editor.putInt("minute",minute);
-        editor.putInt("period",period);
+        editor.putInt("period", period);
 
         // memo
         String memo = memoController.getText().toString();

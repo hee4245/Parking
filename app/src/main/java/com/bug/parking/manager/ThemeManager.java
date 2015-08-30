@@ -12,8 +12,10 @@ import java.util.List;
  */
 public class ThemeManager {
     int[] themeRess = { R.style.PinkTheme, R.style.DeepOrangeTheme, R.style.AmberTheme, R.style.LightBlueTheme, R.style.DeepPurpleTheme};
-    int[] primaryColors;
     int[] primaryColorRess = { R.color.pink_500, R.color.deepOrange_500, R.color.amber_500, R.color.lightBlue_500, R.color.deepPurple_500};
+    int[] primaryDarkColorRess = { R.color.pink_700, R.color.deepOrange_700, R.color.amber_700, R.color.lightBlue_700, R.color.deepPurple_700};
+    int[] primaryColors;
+    int[] primaryDarkColors;
     int[] buttonStyleRess = { R.drawable.button_pink, R.drawable.button_deeporange, R.drawable.button_amber, R.drawable.button_lightblue, R.drawable.button_deeppurple };
 
     private int currentThemeIndex = 0;
@@ -24,6 +26,11 @@ public class ThemeManager {
         primaryColors = new int[primaryColorRess.length];
         for (int i = 0; i < primaryColors.length; ++i) {
             primaryColors[i] = resources.getColor(primaryColorRess[i]);
+        }
+
+        primaryDarkColors = new int[primaryDarkColorRess.length];
+        for (int i = 0; i < primaryDarkColors.length; ++i) {
+            primaryDarkColors[i] = resources.getColor(primaryDarkColorRess[i]);
         }
     }
 
@@ -39,8 +46,16 @@ public class ThemeManager {
         return primaryColorRess;
     }
 
+    public int[] getPrimaryDarkColorResources() {
+        return primaryDarkColorRess;
+    }
+
     public int[] getPrimaryColors() {
         return primaryColors;
+    }
+
+    public int[] getPrimaryDarkColors() {
+        return primaryDarkColors;
     }
 
     public int[] getButtonStyles() {
@@ -55,8 +70,16 @@ public class ThemeManager {
         return primaryColorRess[index];
     }
 
+    public int getPrimaryDarColorResource(int index) {
+        return primaryDarkColorRess[index];
+    }
+
     public int getPrimaryColor(int index) {
         return primaryColors[index];
+    }
+
+    public int getPrimaryDarkColor(int index) {
+        return primaryDarkColors[index];
     }
 
     public int getButtonStyleResource(int index) {
@@ -71,8 +94,16 @@ public class ThemeManager {
         return getPrimaryColorResource(currentThemeIndex);
     }
 
+    public int getCurrentPrimaryDarColorResource() {
+        return getPrimaryDarColorResource(currentThemeIndex);
+    }
+
     public int getCurrentPrimaryColor() {
         return getPrimaryColor(currentThemeIndex);
+    }
+
+    public int getCurrentPrimaryDarkColor() {
+        return getPrimaryDarkColor(currentThemeIndex);
     }
 
     public int getCurrentButtonStyleResource() {

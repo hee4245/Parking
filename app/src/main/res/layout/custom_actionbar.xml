@@ -15,8 +15,8 @@
 
     <ImageButton
         android:id="@+id/setting"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="@dimen/actionbar_icon"
+        android:layout_height="@dimen/actionbar_icon"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:scaleType="fitCenter"

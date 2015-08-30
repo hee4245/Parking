@@ -16,4 +16,6 @@
 
     <dimen name="string_size_small">18sp</dimen>
     <dimen name="string_size_middle">23sp</dimen>
+
+    <dimen name="actionbar_icon">32dp</dimen>
 </resources>

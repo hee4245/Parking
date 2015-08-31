@@ -11,7 +11,6 @@ import java.util.List;
  * Created by json on 15. 8. 30..
  */
 public class ThemeManager {
-    int[] themeRess = { R.style.PinkTheme, R.style.DeepOrangeTheme, R.style.AmberTheme, R.style.LightBlueTheme, R.style.DeepPurpleTheme};
     int[] primaryColorRess = { R.color.pink_500, R.color.deepOrange_500, R.color.amber_500, R.color.lightBlue_500, R.color.deepPurple_500};
     int[] primaryDarkColorRess = { R.color.pink_700, R.color.deepOrange_700, R.color.amber_700, R.color.lightBlue_700, R.color.deepPurple_700};
     int[] primaryColors;
@@ -38,10 +37,6 @@ public class ThemeManager {
         currentThemeIndex = index;
     }
 
-    public int[] getThemeRess() {
-        return themeRess;
-    }
-
     public int[] getPrimaryColorResources() {
         return primaryColorRess;
     }
@@ -62,10 +57,6 @@ public class ThemeManager {
         return buttonStyleRess;
     }
 
-    public int getThemeResource(int index) {
-        return themeRess[index];
-    }
-
     public int getPrimaryColorResource(int index) {
         return primaryColorRess[index];
     }
@@ -84,10 +75,6 @@ public class ThemeManager {
 
     public int getButtonStyleResource(int index) {
         return buttonStyleRess[index];
-    }
-
-    public int getCurrentThemeResource() {
-        return getThemeResource(currentThemeIndex);
     }
 
     public int getCurrentPrimaryColorResource() {

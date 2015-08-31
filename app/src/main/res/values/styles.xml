@@ -3,24 +3,4 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
     </style>
 
-    <style name="PinkTheme" parent="AppTheme">
-        <item name="colorPrimary">@color/pink_500</item>
-    </style>
-
-    <style name="DeepOrangeTheme" parent="AppTheme">
-        <item name="colorPrimary">@color/deepOrange_500</item>
-    </style>
-
-    <style name="AmberTheme" parent="AppTheme">
-        <item name="colorPrimary">@color/amber_500</item>
-    </style>
-
-    <style name="LightBlueTheme" parent="AppTheme">
-        <item name="colorPrimary">@color/lightBlue_500</item>
-    </style>
-
-    <style name="DeepPurpleTheme" parent="AppTheme">
-        <item name="colorPrimary">@color/deepPurple_500</item>
-    </style>
-
 </resources>

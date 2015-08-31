@@ -8,6 +8,7 @@ import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -86,14 +87,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        initTheme();
-
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
         initActionBar();
         initFloorController();
-        initColors();
+        initTheme();
         initAD();
     }
 
@@ -125,20 +124,6 @@ public class MainActivity extends AppCompatActivity {
 //    }
 
     // init
-
-    private void initTheme() {
-        themeManager = new ThemeManager(this);
-
-        SharedPreferences sharedPref = getMyPreferences();
-        int themeIndex = sharedPref.getInt("theme", 0);
-        themeManager.setCurrentThemeIndex(themeIndex);
-
-        setTheme(themeManager.getCurrentThemeResource());
-
-        if (Build.VERSION.SDK_INT >= 21) {
-            getWindow().setStatusBarColor(themeManager.getCurrentPrimaryDarkColor());
-        }
-    }
 
     private void initActionBar() {
         ActionBar actionBar = getSupportActionBar();
@@ -197,9 +182,23 @@ public class MainActivity extends AppCompatActivity {
         myCamera = null;
     }
 
-    private void initColors() {
-        parkingButton.setBackgroundResource(themeManager.getCurrentButtonStyleResource());
+    private void initTheme() {
+        themeManager = new ThemeManager(this);
+        applyTheme();
+    }
+
+    public void applyTheme() {
+        SharedPreferences sharedPref = getMyPreferences();
+        int themeIndex = sharedPref.getInt("theme", 0);
+        themeManager.setCurrentThemeIndex(themeIndex);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setBackgroundDrawable(new ColorDrawable(themeManager.getCurrentPrimaryColor()));
+        if (Build.VERSION.SDK_INT >= 21) {
+            getWindow().setStatusBarColor(themeManager.getCurrentPrimaryDarkColor());
+        }
         floorIndicator.setBackgroundColor(themeManager.getCurrentPrimaryColor());
+        parkingButton.setBackgroundResource(themeManager.getCurrentButtonStyleResource());
     }
 
     private void initAD() {

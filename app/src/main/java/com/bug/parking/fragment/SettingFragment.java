@@ -102,7 +102,7 @@ public class SettingFragment extends DialogFragment {
         SharedPreferences sharedPref = activity.getMyPreferences();
         if (sharedPref.getInt("theme", 0) != currentTheme) {
             sharedPref.edit().putInt("theme", currentTheme).commit();
-            activity.recreate();
+            activity.applyTheme();
         }
 
         this.dismiss();

@@ -50,7 +50,7 @@ import butterknife.OnClick;
 public class MainActivity extends AppCompatActivity {
     private MyCamera myCamera;
     private CameraPreview cameraPreview;
-    private float whRatio = 3.0f / 5.0f;
+    private float whRatio = 2.0f / 3.0f;
     private boolean pictureTaking = false;
     private boolean pictureTaken = false;
     private boolean parked = false;

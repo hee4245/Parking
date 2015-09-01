@@ -5,6 +5,12 @@
     android:layout_height="match_parent"
     android:background="@color/black">
 
+    <View
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/setting_color_indicator"/>
+
     <antistatic.spinnerwheel.WheelHorizontalView
         android:id="@+id/theme_controller"
         android:layout_width="match_parent"

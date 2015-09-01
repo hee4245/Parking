@@ -53,7 +53,7 @@ public abstract class AbstractWheelTextAdapter extends AbstractWheelAdapter {
     public static final int DEFAULT_TEXT_SIZE = 24;
 
     /// Custom text typeface
-    private Typeface textTypeface;
+    private Typeface textTypeface = Typeface.create(Typeface.SANS_SERIF, Typeface.NORMAL);
     
     // Text settings
     private int textColor = DEFAULT_TEXT_COLOR;
@@ -142,7 +142,7 @@ public abstract class AbstractWheelTextAdapter extends AbstractWheelAdapter {
     public void setTextSize(int textSize) {
         this.textSize = textSize;
     }
-    
+
     /**
      * Gets resource Id for items views
      * @return the item resource Id
@@ -241,11 +241,8 @@ public abstract class AbstractWheelTextAdapter extends AbstractWheelAdapter {
             view.setTextSize(textSize);
             view.setLines(1);
         }
-        if (textTypeface != null) {
-            view.setTypeface(textTypeface);
-        } else {
-            view.setTypeface(Typeface.SANS_SERIF, Typeface.BOLD);
-        }
+
+        view.setTypeface(textTypeface);
     }
     
     /**

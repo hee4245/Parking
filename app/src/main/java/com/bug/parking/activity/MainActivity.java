@@ -8,6 +8,7 @@ import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -141,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initFloorController() {
-        floorController.setViewAdapter(new TextAdapter(this, FloorData.getData(), R.layout.floor_item, R.id.floorText));
+        floorController.setViewAdapter(new TextAdapter(this, FloorData.getData(), R.layout.floor_item, R.id.floorText, Typeface.BOLD));
         floorController.setCurrentItem(5);
     }
 

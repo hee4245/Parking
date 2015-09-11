@@ -18,13 +18,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.bug.parking.R;
@@ -152,7 +152,9 @@ public class MainActivity extends AppCompatActivity {
             public void onGlobalLayout() {
                 int width = cameraLayout.getWidth();
                 int height = Math.round(width * whRatio);
-                RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(width, height);
+                ViewGroup.LayoutParams layoutParams = cameraLayout.getLayoutParams();
+                layoutParams.width = width;
+                layoutParams.height = height;
                 cameraLayout.setLayoutParams(layoutParams);
             }
         });

@@ -22,4 +22,6 @@
     <item name="deepPurple_500" type="color">#673AB7</item>
     <item name="deepPurple_700" type="color">#512DA8</item>
 
+    <item name="widget_background" type="color">#C5000000</item>
+
 </resources>

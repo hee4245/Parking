@@ -41,6 +41,7 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.TimeZone;
 
 import antistatic.spinnerwheel.AbstractWheel;
@@ -79,6 +80,8 @@ public class MainActivity extends AppCompatActivity {
     protected AbstractWheel timePeriodsController;
     @Bind(R.id.adView)
     protected AdView adView;
+    @Bind({ R.id.floorController, R.id.time_periods, R.id.time_hour, R.id.time_minute, R.id.memo })
+    List<View> dataControllers;
 
     public interface Callback {
         void callback();
@@ -387,12 +390,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setControllersEnabled(boolean enable) {
-        floorController.setEnabled(enable);
-        timePeriodsController.setEnabled(enable);
-        timeHourController.setEnabled(enable);
-        timeMinuteController.setEnabled(enable);
-        memoController.setEnabled(enable);
+        ButterKnife.apply(dataControllers, ENABLED, enable);
     }
+
+    static final ButterKnife.Setter<View, Boolean> ENABLED = new ButterKnife.Setter<View, Boolean>() {
+        @Override public void set(View view, Boolean value, int index) {
+            view.setEnabled(value);
+        }
+    };
 
     // widget
 

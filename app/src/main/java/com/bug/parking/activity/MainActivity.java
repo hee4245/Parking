@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
     protected AbstractWheel timePeriodsController;
     @Bind(R.id.adView)
     protected AdView adView;
-    @Bind({ R.id.floorController, R.id.time_periods, R.id.time_hour, R.id.time_minute, R.id.memo })
+    @Bind({ R.id.floorController, R.id.time_periods, R.id.time_hour, R.id.time_minute, R.id.memo, R.id.leftAngle, R.id.rightAngle })
     List<View> dataControllers;
 
     public interface Callback {
@@ -398,6 +398,21 @@ public class MainActivity extends AppCompatActivity {
             view.setEnabled(value);
         }
     };
+
+    // controller
+    @OnClick(R.id.rightAngle)
+    public void increaseFloor() {
+        int currentItem = floorController.getCurrentItem();
+        if (currentItem < floorController.getViewAdapter().getItemsCount())
+            floorController.setCurrentItem(currentItem + 1);
+    }
+
+    @OnClick(R.id.leftAngle)
+    public void decreaseFloor() {
+        int currentItem = floorController.getCurrentItem();
+        if (currentItem > 0)
+            floorController.setCurrentItem(currentItem - 1);
+    }
 
     // widget
 

@@ -173,7 +173,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initCamera() {
-        myCamera = new MyCamera(this, afterTakePicture, whRatio);
+        int statusBarHeight = Math.round(25 * getResources().getDisplayMetrics().density);
+
+        myCamera = new MyCamera(this, afterTakePicture, whRatio, statusBarHeight);
         cameraPreview = new CameraPreview(this, myCamera.getCamera());
         cameraPreviewLayout.addView(cameraPreview);
     }
@@ -181,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
     private void removeCamera() {
         cameraPreviewLayout.removeView(cameraPreview);
         cameraPreview = null;
-        myCamera.destoryCamera();
+        myCamera.destroyCamera();
         myCamera = null;
     }
 

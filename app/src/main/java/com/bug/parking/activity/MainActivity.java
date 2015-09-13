@@ -95,13 +95,16 @@ public class MainActivity extends AppCompatActivity {
         initFloorController();
         initTheme();
         initAD();
+        initCameraLayout();
+        initTimeController();
+        loadData();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+
         initCamera();
-        initTimeController();
     }
 
     @Override
@@ -110,19 +113,6 @@ public class MainActivity extends AppCompatActivity {
 
         removeCamera();
     }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        initCameraLayout();
-        loadData();
-    }
-
-//    @Override
-//    protected void onPause() {
-//        super.onPause();
-//    }
 
     // init
 
@@ -241,7 +231,8 @@ public class MainActivity extends AppCompatActivity {
     };
 
     private void resetPictureView() {
-        cameraPreview.startPreview();
+        if (cameraPreview != null)
+            cameraPreview.startPreview();
         pictureView.setVisibility(View.INVISIBLE);
         pictureTaking = false;
         pictureTaken = false;

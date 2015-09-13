@@ -15,11 +15,14 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     private static final String TAG = "CameraPreview";
 
     private Camera camera;
+    private boolean initOn = true;
 
-    public CameraPreview(Context context, Camera camera) {
+    public CameraPreview(Context context, Camera camera, boolean initOn) {
         super(context);
 
         this.camera = camera;
+        this.initOn = initOn;
+
         SurfaceHolder surfaceHolder = getHolder();
         surfaceHolder.addCallback(this);
     }
@@ -63,6 +66,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
             return;
         }
 
-        startPreview();
+        if (initOn)
+            startPreview();
     }
 }

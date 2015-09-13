@@ -43,14 +43,14 @@ public class MyCamera {
             this.whRatio = whRatio;
             this.statusBarHeight = statusBarHeight;
 
-            initCamera();
+//            initCamera();
             initPictureCallback();
         } catch (Exception e) {
             Log.d(TAG, "Error init camera: " + e.getMessage());
         }
     }
 
-    private void initCamera() {
+    public void initCamera() {
         camera = Camera.open();
         camera.setDisplayOrientation(90);
         Camera.Parameters params = camera.getParameters();
@@ -79,6 +79,7 @@ public class MyCamera {
 
     public void destroyCamera() {
         camera.release();
+        camera = null;
     }
 
     private void initPictureCallback() {

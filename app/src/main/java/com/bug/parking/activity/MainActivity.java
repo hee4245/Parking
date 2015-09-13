@@ -30,7 +30,7 @@ import android.widget.Toast;
 import com.bug.parking.R;
 import com.bug.parking.adapter.TextAdapter;
 import com.bug.parking.adapter.TimeAdapter;
-import com.bug.parking.camera.CameraPreview;
+import com.bug.parking.camera.CameraPreviewManager;
 import com.bug.parking.camera.MyCamera;
 import com.bug.parking.data.FloorData;
 import com.bug.parking.data.TimePeriodsData;
@@ -50,7 +50,7 @@ import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity {
     private MyCamera myCamera;
-    private CameraPreview cameraPreview;
+    private CameraPreviewManager cameraPreviewManager;
     private float whRatio = 2.0f / 3.0f;
     private boolean pictureTaking = false;
     private boolean pictureTaken = false;
@@ -95,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
         initFloorController();
         initTheme();
         initAD();
+        initCamera();
         initCameraLayout();
         initTimeController();
         loadData();
@@ -104,14 +105,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        initCamera();
+        turnOnCamera();
+        reloadData();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
 
-        removeCamera();
+        turnOffCamera();
     }
 
     // init
@@ -166,15 +168,19 @@ public class MainActivity extends AppCompatActivity {
         int statusBarHeight = Math.round(25 * getResources().getDisplayMetrics().density);
 
         myCamera = new MyCamera(this, afterTakePicture, whRatio, statusBarHeight);
-        cameraPreview = new CameraPreview(this, myCamera.getCamera());
-        cameraPreviewLayout.addView(cameraPreview);
+        cameraPreviewManager = new CameraPreviewManager(this);
     }
 
-    private void removeCamera() {
-        cameraPreviewLayout.removeView(cameraPreview);
-        cameraPreview = null;
+    private void turnOnCamera() {
+        myCamera.initCamera();
+        cameraPreviewManager.initCameraPreview(myCamera.getCamera());
+        cameraPreviewLayout.addView(cameraPreviewManager.getCameraPreview());
+    }
+
+    private void turnOffCamera() {
+        cameraPreviewLayout.removeView(cameraPreviewManager.getCameraPreview());
+        cameraPreviewManager.destroyCameraPreview();
         myCamera.destroyCamera();
-        myCamera = null;
     }
 
     private void initTheme() {
@@ -224,15 +230,14 @@ public class MainActivity extends AppCompatActivity {
             Drawable picture = myCamera.getPicture();
             pictureView.setImageDrawable(picture);
             pictureView.setVisibility(View.VISIBLE);
-            cameraPreview.stopPreview();
+            cameraPreviewManager.stopPreview();
             pictureTaking = false;
             pictureTaken = true;
         }
     };
 
     private void resetPictureView() {
-        if (cameraPreview != null)
-            cameraPreview.startPreview();
+        cameraPreviewManager.startPreview();
         pictureView.setVisibility(View.INVISIBLE);
         pictureTaking = false;
         pictureTaken = false;
@@ -314,7 +319,7 @@ public class MainActivity extends AppCompatActivity {
             if (picture != null) {
                 pictureView.setImageDrawable(picture);
                 pictureView.setVisibility(View.VISIBLE);
-                cameraPreview.stopPreview();
+                cameraPreviewManager.stopPreview();
                 pictureTaken = true;
             }
 
@@ -348,6 +353,13 @@ public class MainActivity extends AppCompatActivity {
         } else {
             clearData();
         }
+    }
+
+    private void reloadData() {
+        SharedPreferences sharedPref = getMyPreferences();
+
+        if (sharedPref.getBoolean("parked", false) != parked)
+            loadData();
     }
 
     private void clearData() {

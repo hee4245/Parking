@@ -1,9 +1,11 @@
 package com.bug.parking.camera;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.hardware.Camera;
 import android.os.Handler;
@@ -82,15 +84,38 @@ public class MyCamera {
         try {
             fos = context.openFileOutput(fileName, Context.MODE_PRIVATE);
 
+            Point displaySize = new Point();
+            ((Activity) context).getWindowManager().getDefaultDisplay().getRealSize(displaySize);
+            int displayWidth = displaySize.x;
+            int displayHeight = displaySize.y;
+
+            int inSampleSize = 1;
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inPreferredConfig = Bitmap.Config.RGB_565;
+            options.inJustDecodeBounds = true;
+
+            BitmapFactory.decodeByteArray(data, 0, data.length, options);
+            if (options.outWidth > 0 || options.outHeight > 0) {
+
+                float scaleWidth = (float) options.outHeight / (float) displayWidth;
+                float scaleHeight = (float) options.outWidth / (float) displayHeight;
+                float scale = Math.min(scaleWidth, scaleHeight);
+
+                while (inSampleSize * 2 <= scale)
+                    inSampleSize *= 2;
+            }
+
+            options.inSampleSize = inSampleSize;
+            options.inJustDecodeBounds = false;
+
+            Bitmap sampledBitmap = BitmapFactory.decodeByteArray(data, 0, data.length, options);
+
             Matrix matrix = new Matrix();
             matrix.setRotate(90.0f);
 
-            Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-            Bitmap croppedBitmap = Bitmap.createBitmap(bitmap, 0, 0, Math.round(bitmap.getHeight() * whRatio), bitmap.getHeight(), matrix, true);
-//                Toast.makeText(context, ""+bitmap.getWidth()+","+bitmap.getHeight(), Toast.LENGTH_LONG).show();
-            croppedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
-//                fos.write(data);
-//                fos.flush();
+            Bitmap croppedBitmap = Bitmap.createBitmap(sampledBitmap, 0, 0, Math.round(sampledBitmap.getHeight() * whRatio), sampledBitmap.getHeight(), matrix, true);
+            croppedBitmap.compress(Bitmap.CompressFormat.JPEG, 80, fos);
+
             fos.close();
 
             afterTakePicture.callback();

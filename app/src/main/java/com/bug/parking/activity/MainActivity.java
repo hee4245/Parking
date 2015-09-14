@@ -404,14 +404,14 @@ public class MainActivity extends AppCompatActivity {
     public void increaseFloor() {
         int currentItem = floorController.getCurrentItem();
         if (currentItem < floorController.getViewAdapter().getItemsCount())
-            floorController.setCurrentItem(currentItem + 1);
+            floorController.setCurrentItem(currentItem + 1, true);
     }
 
     @OnClick(R.id.leftAngle)
     public void decreaseFloor() {
         int currentItem = floorController.getCurrentItem();
         if (currentItem > 0)
-            floorController.setCurrentItem(currentItem - 1);
+            floorController.setCurrentItem(currentItem - 1, true);
     }
 
     // widget

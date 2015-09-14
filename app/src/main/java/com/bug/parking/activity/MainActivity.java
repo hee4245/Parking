@@ -382,7 +382,7 @@ public class MainActivity extends AppCompatActivity {
         floorController.setCurrentItem(5);
 
         // time to current time
-        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT+9:00"));
+        Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
 
         timeHourController.setCurrentItem(calendar.get(Calendar.HOUR) - 1);
         timeMinuteController.setCurrentItem(calendar.get(Calendar.MINUTE));

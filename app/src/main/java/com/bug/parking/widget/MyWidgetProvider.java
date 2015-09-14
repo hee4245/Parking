@@ -20,6 +20,9 @@ import com.bug.parking.data.TimePeriodsData;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by json on 15. 8. 14..
@@ -110,8 +113,21 @@ public class MyWidgetProvider extends AppWidgetProvider {
             int hour = sharedPref.getInt("hour", -1);
             int minute = sharedPref.getInt("minute", -1);
             if (period != -1 && hour != -1 && minute != -1) {
-                String time = TimePeriodsData.getItem(period) + " " + String.format("%02d", hour+1) + ":" + String.format("%02d", minute);
+                String time = String.format("%s %02d : %02d", TimePeriodsData.getItem(period), hour+1, minute);
                 remoteViews.setTextViewText(R.id.widget_time, time);
+            }
+
+            long parkingTime = sharedPref.getLong("parkingTime", 0);
+            if (parkingTime != 0) {
+                Date currentDate = new Date(System.currentTimeMillis());
+
+                long timeDiff = currentDate.getTime() - parkingTime;
+                long timeDiffHour = TimeUnit.MILLISECONDS.toHours(timeDiff);
+                timeDiff -= TimeUnit.DAYS.toMillis(timeDiffHour);
+                long timeDiffMinute = TimeUnit.MILLISECONDS.toMinutes(timeDiff);
+
+                String timeDiffString = String.format("%02d : %02d", timeDiffHour, timeDiffMinute);
+                remoteViews.setTextViewText(R.id.widget_time_diff, timeDiffString);
             }
 
             // memo
@@ -126,6 +142,7 @@ public class MyWidgetProvider extends AppWidgetProvider {
         } else {
             remoteViews.setTextViewText(R.id.widget_floor, "");
             remoteViews.setTextViewText(R.id.widget_time, "");
+            remoteViews.setTextViewText(R.id.widget_time_diff, "");
             remoteViews.setTextViewText(R.id.widget_memo, "");
             remoteViews.setViewVisibility(R.id.widget_find, View.INVISIBLE);
         }

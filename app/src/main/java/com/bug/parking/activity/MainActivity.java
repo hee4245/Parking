@@ -41,6 +41,7 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -302,9 +303,16 @@ public class MainActivity extends AppCompatActivity {
         int hour = timeHourController.getCurrentItem();
         int minute = timeMinuteController.getCurrentItem();
         int period = timePeriodsController.getCurrentItem();
-        editor.putInt("hour",hour);
-        editor.putInt("minute",minute);
+        editor.putInt("hour", hour);
+        editor.putInt("minute", minute);
         editor.putInt("period", period);
+
+        Calendar cal = Calendar.getInstance(TimeZone.getDefault());
+        cal.set(Calendar.AM_PM, period);
+        cal.set(Calendar.HOUR, hour == 11 ? 0 : hour + 1);
+        cal.set(Calendar.MINUTE, minute);
+        Date parkingDate = cal.getTime();
+        editor.putLong("parkingTime", parkingDate.getTime());
 
         // memo
         String memo = memoController.getText().toString();
@@ -384,7 +392,8 @@ public class MainActivity extends AppCompatActivity {
         // time to current time
         Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
 
-        timeHourController.setCurrentItem(calendar.get(Calendar.HOUR) - 1);
+        int hourIndex = calendar.get(Calendar.HOUR) == 0 ? 11 : calendar.get(Calendar.HOUR) - 1;
+        timeHourController.setCurrentItem(hourIndex);
         timeMinuteController.setCurrentItem(calendar.get(Calendar.MINUTE));
         timePeriodsController.setCurrentItem(calendar.get(Calendar.AM_PM));
 

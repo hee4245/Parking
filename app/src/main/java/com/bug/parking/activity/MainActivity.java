@@ -95,11 +95,11 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         initActionBar();
-        initFloorController();
         initTheme();
         initAD();
         initCamera();
         initCameraLayout();
+        initFloorController();
         initTimeController();
         loadData();
     }
@@ -136,11 +136,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void initFloorController() {
-        floorController.setViewAdapter(new TextAdapter(this, FloorData.getData(), R.layout.floor_item, R.id.floorText, Typeface.BOLD));
-        floorController.setCurrentItem(5);
-    }
-
     private void initCameraLayout() {
         cameraLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -153,18 +148,6 @@ public class MainActivity extends AppCompatActivity {
                 cameraLayout.setLayoutParams(layoutParams);
             }
         });
-    }
-
-    private void initTimeController(){
-        timePeriodsController.setViewAdapter(new TextAdapter(this, TimePeriodsData.getData(), R.layout.time_item, R.id.timeText));
-        timePeriodsController.setVisibleItems(0);
-
-        timeHourController.setViewAdapter(new TimeAdapter(this, 1, 12));
-        timeHourController.setVisibleItems(0);
-
-        timeMinuteController.setViewAdapter(new TimeAdapter(this, 0, 59, "%02d"));
-        timeMinuteController.setVisibleItems(0);
-        timeMinuteController.setCyclic(true);
     }
 
     private void initCamera() {
@@ -208,6 +191,26 @@ public class MainActivity extends AppCompatActivity {
     private void initAD() {
         AdRequest adRequest = new AdRequest.Builder().addTestDevice("F65DD339F469FA0EEC3E6EB7924A1FA9").build();
         adView.loadAd(adRequest);
+    }
+
+    private void initFloorController() {
+        floorController.setViewAdapter(new TextAdapter(this, FloorData.getData(), R.layout.floor_item, R.id.floorText, Typeface.BOLD));
+        floorController.setFrictionFactor(7.0f);
+        floorController.setCurrentItem(5);
+    }
+
+    private void initTimeController(){
+        timePeriodsController.setViewAdapter(new TextAdapter(this, TimePeriodsData.getData(), R.layout.time_item, R.id.timeText));
+        timePeriodsController.setFrictionFactor(5.0f);
+        timePeriodsController.setVisibleItems(0);
+        timeHourController.setViewAdapter(new TimeAdapter(this, 1, 12));
+        timeHourController.setFrictionFactor(5.0f);
+        timeHourController.setVisibleItems(0);
+
+        timeMinuteController.setViewAdapter(new TimeAdapter(this, 0, 59, "%02d"));
+        timeMinuteController.setFrictionFactor(5.0f);
+        timeMinuteController.setVisibleItems(0);
+        timeMinuteController.setCyclic(true);
     }
 
     // picture

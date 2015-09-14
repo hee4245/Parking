@@ -30,6 +30,7 @@ import android.os.Message;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.GestureDetector.SimpleOnGestureListener;
+import android.view.ViewConfiguration;
 import android.view.animation.Interpolator;
 import android.widget.Scroller;
 
@@ -267,6 +268,10 @@ public abstract class WheelScroller {
             listener.onFinished();
             isScrollingPerformed = false;
         }
+    }
+
+    public void setFrictionFactor(float factor) {
+        scroller.setFriction(ViewConfiguration.getScrollFriction() * factor);
     }
 
     protected abstract int getCurrentScrollerPosition();

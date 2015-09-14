@@ -623,6 +623,9 @@ public abstract class AbstractWheel extends View {
         invalidateItemsLayout(false);
     }
 
+    public void setFrictionFactor(float factor) {
+        mScroller.setFrictionFactor(factor);
+    }
 
     //--------------------------------------------------------------------------
     //

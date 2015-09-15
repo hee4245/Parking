@@ -123,7 +123,7 @@ public class MyWidgetProvider extends AppWidgetProvider {
 
                 long timeDiff = currentDate.getTime() - parkingTime;
                 long timeDiffHour = TimeUnit.MILLISECONDS.toHours(timeDiff);
-                timeDiff -= TimeUnit.DAYS.toMillis(timeDiffHour);
+                timeDiff -= TimeUnit.HOURS.toMillis(timeDiffHour);
                 long timeDiffMinute = TimeUnit.MILLISECONDS.toMinutes(timeDiff);
 
                 String timeDiffString = String.format("%02d : %02d", timeDiffHour, timeDiffMinute);

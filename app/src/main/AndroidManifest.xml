@@ -37,6 +37,9 @@
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="com.bug.parking.action.FIND_CLICK" />
+                <action android:name="com.bug.parking.action.UPDATE_BY_ALARM" />
+                <action android:name="com.bug.parking.action.START_ALARM" />
+                <action android:name="com.bug.parking.action.STOP_ALARM" />
             </intent-filter>
             <meta-data android:name="android.appwidget.provider"
                 android:resource="@xml/widget_info" />

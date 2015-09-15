@@ -84,6 +84,9 @@ public class MainActivity extends AppCompatActivity {
     @Bind({ R.id.floorController, R.id.time_periods, R.id.time_hour, R.id.time_minute, R.id.memo, R.id.leftAngle, R.id.rightAngle })
     List<View> dataControllers;
 
+    private static final String ACTION_START_ALARM = "com.bug.parking.action.START_ALARM";
+    private static final String ACTION_STOP_ALARM = "com.bug.parking.action.STOP_ALARM";
+
     public interface Callback {
         void callback();
     }
@@ -225,9 +228,11 @@ public class MainActivity extends AppCompatActivity {
             if (!pictureTaking) {
                 pictureTaking = true;
                 myCamera.takePicture();
+                startWidgetAlarm();
             }
         } else {
             resetPictureView();
+            stopWidgetAlarm();
         }
     }
 
@@ -433,6 +438,18 @@ public class MainActivity extends AppCompatActivity {
         intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
         int[] ids = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), MyWidgetProvider.class));
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,ids);
+        sendBroadcast(intent);
+    }
+
+    private void startWidgetAlarm() {
+        Intent intent = new Intent(this,MyWidgetProvider.class);
+        intent.setAction(ACTION_START_ALARM);
+        sendBroadcast(intent);
+    }
+
+    private void stopWidgetAlarm() {
+        Intent intent = new Intent(this,MyWidgetProvider.class);
+        intent.setAction(ACTION_STOP_ALARM);
         sendBroadcast(intent);
     }
 

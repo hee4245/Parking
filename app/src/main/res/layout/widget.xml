@@ -37,6 +37,14 @@
                     android:gravity="center"
                     android:textSize="@dimen/string_size_small"/>
 
+                <TextView
+                    android:id="@+id/widget_time_diff"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="center"
+                    android:textSize="@dimen/string_size_small"/>
+
                 <Button
                     android:id="@+id/widget_find"
                     android:layout_width="match_parent"

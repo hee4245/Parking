@@ -1,5 +1,6 @@
 package com.bug.parking.widget;
 
+import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
@@ -30,15 +31,17 @@ import java.util.concurrent.TimeUnit;
 public class MyWidgetProvider extends AppWidgetProvider {
     public static final String TAG = "ParkingWidget";
     private static final String ACTION_FIND_CLICK = "com.bug.parking.action.FIND_CLICK";
+    private static final String ACTION_UPDATE_BY_ALARM = "com.bug.parking.action.UPDATE_BY_ALARM";
+    private static final String ACTION_START_ALARM = "com.bug.parking.action.START_ALARM";
+    private static final String ACTION_STOP_ALARM = "com.bug.parking.action.STOP_ALARM";
     private static final String fileName = "park.png";
 
-    private PendingIntent getPendingSelfIntent(Context context, String action) {
-        // An explicit intent directed at the current class (the "self").
-        Intent intent = new Intent(context, getClass());
-        intent.setAction(action);
-        return PendingIntent.getBroadcast(context, 0, intent, 0);
+    @Override
+    public void onDisabled(Context context) {
+        stopAlarm(context);
     }
 
+    @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
 
         // Perform this loop procedure for each App Widget that belongs to this provider
@@ -66,8 +69,22 @@ public class MyWidgetProvider extends AppWidgetProvider {
 
         if (ACTION_FIND_CLICK.equals(intent.getAction())) {
             find(context);
+            stopAlarm(context);
             callOnUpdate(context);
+        } else if (ACTION_UPDATE_BY_ALARM.equals(intent.getAction())) {
+            callOnUpdate(context);
+        } else if (ACTION_START_ALARM.equals(intent.getAction())) {
+            startAlarm(context);
+        } else if (ACTION_STOP_ALARM.equals(intent.getAction())) {
+            stopAlarm(context);
         }
+    }
+
+    private PendingIntent getPendingSelfIntent(Context context, String action) {
+        // An explicit intent directed at the current class (the "self").
+        Intent intent = new Intent(context, getClass());
+        intent.setAction(action);
+        return PendingIntent.getBroadcast(context, 0, intent, 0);
     }
 
     private void callOnUpdate(Context context) {
@@ -152,5 +169,51 @@ public class MyWidgetProvider extends AppWidgetProvider {
         SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
 
         sharedPref.edit().putBoolean("parked", false).commit();
+    }
+
+    private void startAlarm(Context context) {
+        AppWidgetAlarm appWidgetAlarm = new AppWidgetAlarm(context);
+        appWidgetAlarm.startAlarm();
+    }
+
+    private void stopAlarm(Context context) {
+        AppWidgetAlarm appWidgetAlarm = new AppWidgetAlarm(context);
+        appWidgetAlarm.stopAlarm();
+    }
+
+    public class AppWidgetAlarm
+    {
+        private final int ALARM_ID = 0;
+        private final int INTERVAL_MILLIS = 60000;
+
+        private Context context;
+
+        public AppWidgetAlarm(Context context) {
+            this.context = context;
+
+        }
+
+        public void startAlarm()
+        {
+            Calendar calendar = Calendar.getInstance();
+            calendar.add(Calendar.MILLISECOND, INTERVAL_MILLIS);
+
+            Intent alarmIntent = new Intent(ACTION_UPDATE_BY_ALARM);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, ALARM_ID, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+            AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            // RTC does not wake the device up
+            alarmManager.setRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), INTERVAL_MILLIS, pendingIntent);
+        }
+
+
+        public void stopAlarm()
+        {
+            Intent alarmIntent = new Intent(ACTION_UPDATE_BY_ALARM);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, ALARM_ID, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+            AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            alarmManager.cancel(pendingIntent);
+        }
     }
 }

@@ -155,9 +155,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initCamera() {
-        int statusBarHeight = Math.round(25 * getResources().getDisplayMetrics().density);
-
-        myCamera = new MyCamera(this, afterTakePicture, whRatio, statusBarHeight);
+        myCamera = new MyCamera(this, afterTakePicture, whRatio);
         cameraPreviewManager = new CameraPreviewManager(this);
     }
 

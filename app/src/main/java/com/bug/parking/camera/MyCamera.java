@@ -10,7 +10,9 @@ import android.graphics.PointF;
 import android.graphics.drawable.Drawable;
 import android.hardware.Camera;
 import android.os.Handler;
+import android.support.v7.app.ActionBar;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.bug.parking.activity.MainActivity;
 
@@ -30,18 +32,17 @@ public class MyCamera {
     private Camera camera;
     private Camera.Size pictureSize;
     private Point displaySize = new Point();
-    private int statusBarHeight;
+    private int statusBarHeight = 0;
     private PointF scaleRatio = new PointF();
     private Camera.PictureCallback pictureCallback;
     private MainActivity.Callback afterTakePicture;
     private float whRatio;
 
-    public MyCamera(Context context, MainActivity.Callback afterTakePicture, float whRatio, int statusBarHeight) {
+    public MyCamera(Context context, MainActivity.Callback afterTakePicture, float whRatio) {
         try {
             this.context = context;
             this.afterTakePicture = afterTakePicture;
             this.whRatio = whRatio;
-            this.statusBarHeight = statusBarHeight;
 
 //            initCamera();
             initPictureCallback();
@@ -58,23 +59,23 @@ public class MyCamera {
         params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
 
         ((Activity) context).getWindowManager().getDefaultDisplay().getRealSize(displaySize);
+        statusBarHeight = Math.round(25 * context.getResources().getDisplayMetrics().density);
 
-        pictureSize = camera.new Size(0, 0);
+        pictureSize = camera.new Size(Integer.MAX_VALUE, Integer.MAX_VALUE);
         List<Camera.Size> sizes = params.getSupportedPictureSizes();
         for (Camera.Size size : sizes) {
-            if (size.height <= displaySize.x && size.height > pictureSize.height && size.width > pictureSize.width) {
+            if (size.height >= displaySize.x && size.width <= pictureSize.width && size.height <= pictureSize.height) {
                 pictureSize = size;
             }
         }
-        if (pictureSize.width <= 0 || pictureSize.height <= 0) {
-            pictureSize = sizes.get(0);
+        if (pictureSize.width > 0 && pictureSize.height > 0) {
+            params.setPictureSize(pictureSize.width, pictureSize.height);
         }
-        params.setPictureSize(pictureSize.width, pictureSize.height);
 
         camera.setParameters(params);
 
-        scaleRatio.x = (float)pictureSize.height / (float)(displaySize.x);
-        scaleRatio.y = (float)pictureSize.width / (float)(displaySize.y - statusBarHeight);
+        scaleRatio.x = (float)(displaySize.x) / (float)pictureSize.height;
+        scaleRatio.y = (float)(displaySize.y - statusBarHeight) / (float)pictureSize.width;
     }
 
     public void destroyCamera() {
@@ -110,47 +111,61 @@ public class MyCamera {
         try {
             fos = context.openFileOutput(fileName, Context.MODE_PRIVATE);
 
-            int inSampleSize = 1;
+            int inSampleSize = calculateInSampleSize(data);
+
             BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inJustDecodeBounds = true;
-
-            BitmapFactory.decodeByteArray(data, 0, data.length, options);
-            if (options.outWidth > 0 || options.outHeight > 0) {
-
-                float scaleWidth = (float) options.outHeight / (float) displaySize.x;
-                float scaleHeight = (float) options.outWidth / (float) displaySize.y;
-                float scale = Math.min(scaleWidth, scaleHeight);
-
-                while (inSampleSize * 2 <= scale)
-                    inSampleSize *= 2;
-            }
-
             options.inSampleSize = inSampleSize;
-            options.inJustDecodeBounds = false;
+//            options.inJustDecodeBounds = false;
 
             Bitmap sampledBitmap = BitmapFactory.decodeByteArray(data, 0, data.length, options);
 
             Matrix matrix = new Matrix();
-            matrix.setScale(1.0f / scaleRatio.y, 1.0f / scaleRatio.x);
-            matrix.postRotate(90.0f);
+            matrix.setRotate(90.0f);
+            matrix.postScale(scaleRatio.x / (float) inSampleSize, scaleRatio.y / (float) inSampleSize);
 
-            int actionBarHeight = ((MainActivity)context).getSupportActionBar().getHeight();
-            int picturePosX = Math.round(scaleRatio.y * (actionBarHeight));
+            int actionBarHeight = 0;
+            ActionBar actionBar = ((MainActivity) context).getSupportActionBar();
+            if (actionBar != null)
+                actionBarHeight = actionBar.getHeight();
+
+            int picturePosX = Math.round((float)actionBarHeight / scaleRatio.y);
             int picturePosY = 0;
-            int pictureWidth = Math.round(scaleRatio.y * sampledBitmap.getHeight() * whRatio);
-            int pictureHeight = Math.round(scaleRatio.x * sampledBitmap.getHeight());
+            int pictureWidth = Math.round(sampledBitmap.getHeight() * whRatio / scaleRatio.y);
+            int pictureHeight = Math.round(sampledBitmap.getHeight() / scaleRatio.x);
 
             Bitmap croppedBitmap = Bitmap.createBitmap(sampledBitmap, picturePosX, picturePosY, pictureWidth, pictureHeight, matrix, true);
+            sampledBitmap = null;
             croppedBitmap.compress(Bitmap.CompressFormat.JPEG, 80, fos);
+            croppedBitmap = null;
 
             fos.close();
 
             afterTakePicture.callback();
         } catch (FileNotFoundException e) {
-            Log.d(TAG, "File not found: " + e.getMessage());
+            Log.e(TAG, "File not found: " + e.getMessage());
         } catch (IOException e) {
-            Log.d(TAG, "Error accessing file: " + e.getMessage());
+            Log.e(TAG, "Error accessing file: " + e.getMessage());
+        } catch (Exception e) {
+            Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
         }
+    }
+
+    private int calculateInSampleSize(byte[] data) {
+        int inSampleSize = 1;
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+
+        BitmapFactory.decodeByteArray(data, 0, data.length, options);
+        if (options.outWidth > 0 || options.outHeight > 0) {
+
+            float scaleWidth = (float) options.outHeight / (float) displaySize.x;
+            float scaleHeight = (float) options.outWidth / (float) displaySize.y;
+            float scale = Math.min(scaleWidth, scaleHeight);
+
+            while (inSampleSize * 2 <= scale)
+                inSampleSize *= 2;
+        }
+        return inSampleSize;
     }
 
     private String getPicturePath() {

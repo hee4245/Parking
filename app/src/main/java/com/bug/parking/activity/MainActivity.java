@@ -51,14 +51,14 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity {
-    private MyCamera myCamera;
-    private CameraPreviewManager cameraPreviewManager;
-    private float whRatio = 2.0f / 3.0f;
-    private boolean pictureTaking = false;
-    private boolean pictureTaken = false;
-    private boolean parked = false;
-    private ThemeManager themeManager;
-
+    static final ButterKnife.Setter<View, Boolean> ENABLED = new ButterKnife.Setter<View, Boolean>() {
+        @Override
+        public void set(View view, Boolean value, int index) {
+            view.setEnabled(value);
+        }
+    };
+    private static final String ACTION_START_ALARM = "com.bug.parking.action.START_ALARM";
+    private static final String ACTION_STOP_ALARM = "com.bug.parking.action.STOP_ALARM";
     @Bind(R.id.cameraLayout)
     protected FrameLayout cameraLayout;
     @Bind(R.id.cameraPreview)
@@ -81,15 +81,26 @@ public class MainActivity extends AppCompatActivity {
     protected AbstractWheel timePeriodsController;
     @Bind(R.id.adView)
     protected AdView adView;
-    @Bind({ R.id.floorController, R.id.time_periods, R.id.time_hour, R.id.time_minute, R.id.memo, R.id.leftAngle, R.id.rightAngle })
+    @Bind({R.id.floorController, R.id.time_periods, R.id.time_hour, R.id.time_minute, R.id.memo, R.id.leftAngle, R.id.rightAngle})
     List<View> dataControllers;
-
-    private static final String ACTION_START_ALARM = "com.bug.parking.action.START_ALARM";
-    private static final String ACTION_STOP_ALARM = "com.bug.parking.action.STOP_ALARM";
-
-    public interface Callback {
-        void callback();
-    }
+    private MyCamera myCamera;
+    private CameraPreviewManager cameraPreviewManager;
+    private float whRatio = 2.0f / 3.0f;
+    private boolean pictureTaking = false;
+    private boolean pictureTaken = false;
+    public Callback afterTakePicture = new Callback() {
+        @Override
+        public void callback() {
+            Drawable picture = myCamera.getPicture();
+            pictureView.setImageDrawable(picture);
+            pictureView.setVisibility(View.VISIBLE);
+            cameraPreviewManager.stopPreview();
+            pictureTaking = false;
+            pictureTaken = true;
+        }
+    };
+    private boolean parked = false;
+    private ThemeManager themeManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,14 +127,14 @@ public class MainActivity extends AppCompatActivity {
         reloadData();
     }
 
+    // init
+
     @Override
     protected void onStop() {
         super.onStop();
 
         turnOffCamera();
     }
-
-    // init
 
     private void initActionBar() {
         ActionBar actionBar = getSupportActionBar();
@@ -201,7 +212,7 @@ public class MainActivity extends AppCompatActivity {
         floorController.setCurrentItem(5);
     }
 
-    private void initTimeController(){
+    private void initTimeController() {
         timePeriodsController.setViewAdapter(new TextAdapter(this, TimePeriodsData.getData(), R.layout.time_item, R.id.timeText));
         timePeriodsController.setFrictionFactor(5.0f);
         timePeriodsController.setVisibleItems(0);
@@ -233,18 +244,6 @@ public class MainActivity extends AppCompatActivity {
             stopWidgetAlarm();
         }
     }
-
-    public Callback afterTakePicture = new Callback() {
-        @Override
-        public void callback() {
-            Drawable picture = myCamera.getPicture();
-            pictureView.setImageDrawable(picture);
-            pictureView.setVisibility(View.VISIBLE);
-            cameraPreviewManager.stopPreview();
-            pictureTaking = false;
-            pictureTaken = true;
-        }
-    };
 
     private void resetPictureView() {
         cameraPreviewManager.startPreview();
@@ -347,16 +346,16 @@ public class MainActivity extends AppCompatActivity {
             }
 
             // time
-            int period = sharedPref.getInt("period",-1);
-            int hour = sharedPref.getInt("hour",-1);
-            int minute = sharedPref.getInt("minute",-1);
-            if(period != -1){
+            int period = sharedPref.getInt("period", -1);
+            int hour = sharedPref.getInt("hour", -1);
+            int minute = sharedPref.getInt("minute", -1);
+            if (period != -1) {
                 timePeriodsController.setCurrentItem(period);
             }
-            if(hour != -1){
+            if (hour != -1) {
                 timeHourController.setCurrentItem(hour);
             }
-            if(minute != -1){
+            if (minute != -1) {
                 timeMinuteController.setCurrentItem(minute);
             }
 
@@ -408,12 +407,6 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.apply(dataControllers, ENABLED, enable);
     }
 
-    static final ButterKnife.Setter<View, Boolean> ENABLED = new ButterKnife.Setter<View, Boolean>() {
-        @Override public void set(View view, Boolean value, int index) {
-            view.setEnabled(value);
-        }
-    };
-
     // controller
     @OnClick(R.id.rightAngle)
     public void increaseFloor() {
@@ -429,24 +422,24 @@ public class MainActivity extends AppCompatActivity {
             floorController.setCurrentItem(currentItem - 1, true);
     }
 
-    // widget
-
     private void updateWidget() {
-        Intent intent = new Intent(this,MyWidgetProvider.class);
+        Intent intent = new Intent(this, MyWidgetProvider.class);
         intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
         int[] ids = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), MyWidgetProvider.class));
-        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,ids);
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
         sendBroadcast(intent);
     }
 
+    // widget
+
     private void startWidgetAlarm() {
-        Intent intent = new Intent(this,MyWidgetProvider.class);
+        Intent intent = new Intent(this, MyWidgetProvider.class);
         intent.setAction(ACTION_START_ALARM);
         sendBroadcast(intent);
     }
 
     private void stopWidgetAlarm() {
-        Intent intent = new Intent(this,MyWidgetProvider.class);
+        Intent intent = new Intent(this, MyWidgetProvider.class);
         intent.setAction(ACTION_STOP_ALARM);
         sendBroadcast(intent);
     }
@@ -472,14 +465,14 @@ public class MainActivity extends AppCompatActivity {
         return themeManager;
     }
 
-    // etc
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
+
+    // etc
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -494,5 +487,9 @@ public class MainActivity extends AppCompatActivity {
 //        }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public interface Callback {
+        void callback();
     }
 }

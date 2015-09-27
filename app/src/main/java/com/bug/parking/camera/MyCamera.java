@@ -74,8 +74,8 @@ public class MyCamera {
 
         camera.setParameters(params);
 
-        scaleRatio.x = (float)(displaySize.x) / (float)pictureSize.height;
-        scaleRatio.y = (float)(displaySize.y - statusBarHeight) / (float)pictureSize.width;
+        scaleRatio.x = (float) (displaySize.x) / (float) pictureSize.height;
+        scaleRatio.y = (float) (displaySize.y - statusBarHeight) / (float) pictureSize.width;
     }
 
     public void destroyCamera() {
@@ -91,18 +91,6 @@ public class MyCamera {
                 handler.post(new SavePhotoRunnable(data));
             }
         };
-    }
-
-    private class SavePhotoRunnable implements Runnable {
-        byte[] data;
-
-        public SavePhotoRunnable(byte[] data) {
-            this.data = data;
-        }
-
-        public void run() {
-            savePhoto(data);
-        }
     }
 
     private void savePhoto(byte[] data) {
@@ -128,7 +116,7 @@ public class MyCamera {
             if (actionBar != null)
                 actionBarHeight = actionBar.getHeight();
 
-            int picturePosX = Math.round((float)actionBarHeight / scaleRatio.y);
+            int picturePosX = Math.round((float) actionBarHeight / scaleRatio.y);
             int picturePosY = 0;
             int pictureWidth = Math.round(sampledBitmap.getHeight() * whRatio / scaleRatio.y);
             int pictureHeight = Math.round(sampledBitmap.getHeight() / scaleRatio.x);
@@ -183,5 +171,17 @@ public class MyCamera {
 
     public void takePicture() {
         camera.takePicture(null, null, pictureCallback);
+    }
+
+    private class SavePhotoRunnable implements Runnable {
+        byte[] data;
+
+        public SavePhotoRunnable(byte[] data) {
+            this.data = data;
+        }
+
+        public void run() {
+            savePhoto(data);
+        }
     }
 }

@@ -11,11 +11,11 @@ import antistatic.spinnerwheel.adapters.NumericWheelAdapter;
  */
 public class TimeAdapter extends NumericWheelAdapter {
 
-    public TimeAdapter(Context context, int min, int max){
+    public TimeAdapter(Context context, int min, int max) {
         this(context, min, max, null);
     }
 
-    public TimeAdapter(Context context, int min, int max, String format){
+    public TimeAdapter(Context context, int min, int max, String format) {
         super(context, min, max, format);
         setItemResource(R.layout.time_item);
         setItemTextResource(R.id.timeText);

@@ -2,7 +2,6 @@ package com.bug.parking.fragment;
 
 import android.app.DialogFragment;
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
@@ -26,24 +25,21 @@ import butterknife.OnClick;
  */
 public class SettingFragment extends DialogFragment {
 
-    private enum SettingMode {THEME, FONT}
-
-//    @Bind(R.id.setting_theme_button)
-//    Button themeButton;
-//    @Bind(R.id.setting_font_button)
-//    Button fontButton;
-
-    //    @BindColor(R.color.light_gray_background)
+//    @BindColor(R.color.light_gray_background)
 //    int activeColor;
 //    @BindColor(R.color.white)
 //    int defaultColor;
     @Bind(R.id.setting_content_theme)
     FrameLayout contentTheme;
+
+//    @Bind(R.id.setting_theme_button)
+//    Button themeButton;
+//    @Bind(R.id.setting_font_button)
+//    Button fontButton;
     @Bind(R.id.setting_content_font)
     FrameLayout contentFont;
     @Bind(R.id.setting_ok)
     Button okButton;
-
     Fragment themeFragment = new ThemeFragment();
     Fragment fontFragment = new FontFragment();
 
@@ -107,4 +103,6 @@ public class SettingFragment extends DialogFragment {
 
         this.dismiss();
     }
+
+    private enum SettingMode {THEME, FONT}
 }

@@ -5,17 +5,15 @@ import android.content.res.Resources;
 
 import com.bug.parking.R;
 
-import java.util.List;
-
 /**
  * Created by json on 15. 8. 30..
  */
 public class ThemeManager {
-    int[] primaryColorRess = { R.color.pink_500, R.color.deepOrange_500, R.color.amber_500, R.color.lightBlue_500, R.color.deepPurple_500};
-    int[] primaryDarkColorRess = { R.color.pink_700, R.color.deepOrange_700, R.color.amber_700, R.color.lightBlue_700, R.color.deepPurple_700};
+    int[] primaryColorRess = {R.color.pink_500, R.color.deepOrange_500, R.color.amber_500, R.color.lightBlue_500, R.color.deepPurple_500};
+    int[] primaryDarkColorRess = {R.color.pink_700, R.color.deepOrange_700, R.color.amber_700, R.color.lightBlue_700, R.color.deepPurple_700};
     int[] primaryColors;
     int[] primaryDarkColors;
-    int[] buttonStyleRess = { R.drawable.button_pink, R.drawable.button_deeporange, R.drawable.button_amber, R.drawable.button_lightblue, R.drawable.button_deeppurple };
+    int[] buttonStyleRess = {R.drawable.button_pink, R.drawable.button_deeporange, R.drawable.button_amber, R.drawable.button_lightblue, R.drawable.button_deeppurple};
 
     private int currentThemeIndex = 0;
 

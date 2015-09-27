@@ -130,7 +130,7 @@ public class MyWidgetProvider extends AppWidgetProvider {
             int hour = sharedPref.getInt("hour", -1);
             int minute = sharedPref.getInt("minute", -1);
             if (period != -1 && hour != -1 && minute != -1) {
-                String time = String.format("%s %02d : %02d", TimePeriodsData.getItem(period), hour+1, minute);
+                String time = String.format("%s %02d : %02d", TimePeriodsData.getItem(period), hour + 1, minute);
                 remoteViews.setTextViewText(R.id.widget_time, time);
             }
 
@@ -181,8 +181,7 @@ public class MyWidgetProvider extends AppWidgetProvider {
         appWidgetAlarm.stopAlarm();
     }
 
-    public class AppWidgetAlarm
-    {
+    public class AppWidgetAlarm {
         private final int ALARM_ID = 0;
         private final int INTERVAL_MILLIS = 60000;
 
@@ -193,8 +192,7 @@ public class MyWidgetProvider extends AppWidgetProvider {
 
         }
 
-        public void startAlarm()
-        {
+        public void startAlarm() {
             Calendar calendar = Calendar.getInstance();
             calendar.add(Calendar.MILLISECOND, INTERVAL_MILLIS);
 
@@ -207,8 +205,7 @@ public class MyWidgetProvider extends AppWidgetProvider {
         }
 
 
-        public void stopAlarm()
-        {
+        public void stopAlarm() {
             Intent alarmIntent = new Intent(ACTION_UPDATE_BY_ALARM);
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context, ALARM_ID, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 

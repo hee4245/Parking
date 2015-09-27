@@ -27,9 +27,9 @@ public class ThemeFragment extends Fragment {
         View view = inflater.inflate(R.layout.theme_fragment, container, false);
         ButterKnife.bind(this, view);
 
-        themeController.setViewAdapter(new ColorBarAdapter(inflater, ((MainActivity)getActivity()).getThemeManager().getPrimaryColors()));
+        themeController.setViewAdapter(new ColorBarAdapter(inflater, ((MainActivity) getActivity()).getThemeManager().getPrimaryColors()));
 
-        MainActivity activity = (MainActivity)getActivity();
+        MainActivity activity = (MainActivity) getActivity();
         SharedPreferences sharedPref = activity.getMyPreferences();
         themeController.setCurrentItem(sharedPref.getInt("theme", 0));
 

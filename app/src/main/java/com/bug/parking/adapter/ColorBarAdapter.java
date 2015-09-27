@@ -1,6 +1,5 @@
 package com.bug.parking.adapter;
 
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 
